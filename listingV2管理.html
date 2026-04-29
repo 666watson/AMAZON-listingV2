@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>设置销售人员-新增生效时间-交互原型</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: #f3f5f8;
+      color: #333;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(243, 245, 248, 0.92) 100%);
+    }
+
+    .mock-header {
+      height: 72px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border-bottom: 1px solid #e8edf3;
+      color: #5a6472;
+    }
+
+    .mock-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #364152;
+    }
+
+    .mock-toolbar {
+      display: flex;
+      gap: 12px;
+    }
+
+    .chip {
+      height: 32px;
+      padding: 0 14px;
+      border: 1px solid #d8e0eb;
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      color: #5f6b7a;
+    }
+
+    .mock-content {
+      padding: 24px 28px 56px;
+    }
+
+    .mock-filter {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .select-cell input,
+    .select-cell input {
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      accent-color: #409eff;
+      cursor: pointer;
+    }
+
+    .action-dropdown {
+      position: relative;
+    }
+
+    .action-btn {
+      height: 24px;
+      min-width: 60px;
+      padding: 0 8px;
+      border: 1px solid #d8e0eb;
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #5f6b7a;
+      cursor: pointer;
+    }
+
+    .action-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 128px;
+      padding: 6px 0;
+      background: #fff;
+      border: 1px solid #e4e7ed;
+      border-radius: 4px;
+      box-shadow: 0 6px 18px rgba(31, 45, 61, 0.14);
+      display: none;
+      z-index: 40;
+    }
+
+    .action-menu.open {
+      display: block;
+    }
+
+    .action-menu button {
+      width: 100%;
+      height: 32px;
+      padding: 0 12px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+      color: #5c6675;
+      cursor: pointer;
+    }
+
+    .action-menu button:hover {
+      background: #f5f7fa;
+      color: #409eff;
+    }
+
+    .mock-input {
+      width: 180px;
+      height: 34px;
+      border: 1px solid #d8e0eb;
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    .mock-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #e6ebf2;
+    }
+
+    .mock-table th,
+    .mock-table td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #edf1f6;
+      text-align: left;
+      font-size: 13px;
+      color: #5c6675;
+    }
+
+    .mock-table th {
+      background: #fbfcfe;
+      color: #667085;
+      font-weight: 600;
+    }
+
+    .shop-person-cell {
+      min-width: 138px;
+      line-height: 20px;
+    }
+
+    .shop-person-cell strong {
+      display: block;
+      color: #364152;
+      font-weight: 600;
+    }
+
+    .shop-person-cell span {
+      color: #7b8794;
+      font-size: 12px;
+    }
+
+    .select-cell {
+      width: 76px;
+      text-align: center;
+      padding-left: 8px;
+      padding-right: 8px;
+      vertical-align: top;
+    }
+
+    .select-header {
+      display: inline-flex;
+      width: 60px;
+      justify-content: center;
+    }
+
+    .select-stack {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .select-stack .action-menu {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .green {
+      color: #2f9b44;
+      font-weight: 600;
+    }
+
+    .blue {
+      color: #2f6de0;
+      font-weight: 600;
+    }
+
+    .red {
+      color: #e25555;
+      font-weight: 600;
+    }
+
+    .salesperson-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .edit-salesperson-btn {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: #409eff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .edit-salesperson-btn:hover {
+      background: rgba(64, 158, 255, 0.1);
+    }
+
+    .edit-salesperson-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 32, 51, 0.18);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 48px;
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      width: 400px;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 10px 28px rgba(31, 45, 61, 0.18);
+      overflow: visible;
+    }
+
+    .wide-modal {
+      width: 680px;
+    }
+
+    .modal-header {
+      height: 50px;
+      padding: 0 18px 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ebeef5;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #303133;
+    }
+
+    .close-icon {
+      border: 0;
+      background: transparent;
+      color: #909399;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+    }
+
+    .modal-body {
+      padding: 20px 20px 14px;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .form-label {
+      width: 92px;
+      font-size: 14px;
+      color: #606266;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .required {
+      color: #f56c6c;
+      margin-right: 4px;
+    }
+
+    .form-field {
+      flex: 1;
+      position: relative;
+    }
+
+    .select-input,
+    .datetime-display {
+      width: 100%;
+      height: 34px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 14px;
+      color: #606266;
+      padding: 0 34px 0 12px;
+      outline: none;
+    }
+
+    .select-input:focus,
+    .datetime-display.active {
+      border-color: #409eff;
+      box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.12);
+    }
+
+    .field-icon {
+      position: absolute;
+      top: 50%;
+      right: 11px;
+      width: 12px;
+      height: 12px;
+      transform: translateY(-50%);
+      pointer-events: none;
+      opacity: 0.65;
+    }
+
+    .datetime-display {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .placeholder {
+      color: #c0c4cc;
+    }
+
+    .modal-footer {
+      border-top: 1px solid #ebeef5;
+      padding: 14px 22px 18px;
+      text-align: right;
+    }
+
+    .btn {
+      min-width: 58px;
+      height: 32px;
+      padding: 0 18px;
+      border-radius: 4px;
+      border: 1px solid #dcdfe6;
+      background: #fff;
+      color: #606266;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .btn-primary {
+      border-color: #409eff;
+      background: #409eff;
+      color: #fff;
+    }
+
+    .picker-panel {
+      position: absolute;
+      top: 42px;
+      left: 0;
+      width: 320px;
+      background: #fff;
+      border: 1px solid #e4e7ed;
+      border-radius: 4px;
+      box-shadow: 0 6px 18px rgba(31, 45, 61, 0.18);
+      z-index: 50;
+      display: none;
+    }
+
+    .picker-panel.open {
+      display: block;
+    }
+
+    .picker-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-bottom: 1px solid #ebeef5;
+    }
+
+    .picker-nav {
+      border: 0;
+      background: transparent;
+      color: #909399;
+      cursor: pointer;
+      font-size: 18px;
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      border-radius: 4px;
+    }
+
+    .picker-nav:hover {
+      background: #f5f7fa;
+    }
+
+    .picker-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #303133;
+    }
+
+    .picker-weekdays,
+    .picker-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      padding: 10px 12px 0;
+    }
+
+    .picker-weekdays div {
+      text-align: center;
+      font-size: 12px;
+      color: #909399;
+      line-height: 28px;
+    }
+
+    .day {
+      height: 34px;
+      border: 0;
+      border-radius: 4px;
+      background: #fff;
+      color: #606266;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .day:hover {
+      background: #ecf5ff;
+      color: #409eff;
+    }
+
+    .day.muted {
+      color: #c0c4cc;
+    }
+
+    .day.selected {
+      background: #409eff;
+      color: #fff;
+    }
+
+    .picker-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #f0f2f5;
+    }
+
+    .picker-btn {
+      min-width: 56px;
+      height: 30px;
+      border-radius: 4px;
+      border: 1px solid #dcdfe6;
+      background: #fff;
+      color: #606266;
+      cursor: pointer;
+    }
+
+    .picker-btn.primary {
+      border-color: #409eff;
+      background: #409eff;
+      color: #fff;
+    }
+
+    .tips {
+      margin-top: 8px;
+      color: #909399;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .task-card {
+      padding: 14px 16px;
+      background: #f8fafc;
+      border: 1px solid #e6ebf2;
+      border-radius: 4px;
+      line-height: 22px;
+      font-size: 13px;
+      color: #5c6675;
+    }
+
+    .task-card strong {
+      color: #364152;
+    }
+
+    .task-grid {
+      border: 1px solid #dfe6ee;
+      background: #fff;
+    }
+
+    .task-grid-row {
+      display: grid;
+      grid-template-columns: 126px 1fr;
+      min-height: 38px;
+      border-bottom: 1px solid #dfe6ee;
+    }
+
+    .task-grid-row:last-child {
+      border-bottom: 0;
+    }
+
+    .task-grid-label {
+      padding: 10px 12px;
+      background: #f7f9fc;
+      border-right: 1px solid #dfe6ee;
+      font-size: 13px;
+      line-height: 18px;
+      color: #606266;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .task-grid-label .required {
+      margin-right: 2px;
+    }
+
+    .task-grid-field {
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .task-control,
+    .task-textarea {
+      border: 1px solid #cfd8e3;
+      border-radius: 4px;
+      background: #fff;
+      color: #606266;
+      font-size: 13px;
+    }
+
+    .task-control {
+      height: 28px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      position: relative;
+      min-width: 120px;
+    }
+
+    button.task-control {
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .task-control.full {
+      width: 100%;
+    }
+
+    .task-control.medium {
+      width: 210px;
+    }
+
+    .task-control.small {
+      width: 120px;
+    }
+
+    .task-control.large {
+      width: 300px;
+    }
+
+    .task-control.select::after {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-right: 1.5px solid #8ca0b3;
+      border-bottom: 1.5px solid #8ca0b3;
+      transform: translateY(-65%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .task-control.select {
+      padding-right: 26px;
+    }
+
+    .task-control.select.open::after {
+      transform: translateY(-35%) rotate(225deg);
+    }
+
+    .task-control.placeholder,
+    .task-textarea.placeholder {
+      color: #c0c4cc;
+    }
+
+    .task-control.danger {
+      border-color: #f3c6c6;
+      background: #fff7f7;
+    }
+
+    .task-btn {
+      height: 28px;
+      padding: 0 12px;
+      border: 1px solid #cfd8e3;
+      border-radius: 4px;
+      background: #fff;
+      color: #606266;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .task-link {
+      color: #5468ff;
+      font-size: 12px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .task-icon-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #dbe5ef;
+      border-radius: 4px;
+      background: #f7fbff;
+      color: #7aa7c7;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .task-icon-btn:hover {
+      background: #eef6ff;
+      border-color: #b9d5f6;
+      color: #4d89c7;
+    }
+
+    .task-icon-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .task-textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 8px 10px;
+      line-height: 20px;
+    }
+
+    .task-footer {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding-top: 12px;
+    }
+
+    .task-dropdown-panel {
+      position: fixed;
+      width: 240px;
+      background: #fff;
+      border: 1px solid #d8e0eb;
+      border-radius: 4px;
+      box-shadow: 0 8px 20px rgba(31, 45, 61, 0.16);
+      display: none;
+      z-index: 120;
+      overflow: hidden;
+    }
+
+    .task-dropdown-panel.open {
+      display: block;
+    }
+
+    .task-dropdown-options {
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+
+    .task-dropdown-option,
+    .task-dropdown-empty {
+      width: 100%;
+      min-height: 32px;
+      padding: 6px 12px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+      color: #5c6675;
+      cursor: pointer;
+    }
+
+    .task-dropdown-option:hover {
+      background: #f5f7fa;
+      color: #409eff;
+    }
+
+    .task-dropdown-empty {
+      color: #c0c4cc;
+      cursor: default;
+    }
+
+    .warehouse-modal {
+      width: 600px;
+      border: 2px solid #79aaf7;
+      box-shadow: 0 8px 20px rgba(49, 84, 145, 0.18);
+    }
+
+    .warehouse-modal .modal-header {
+      height: 32px;
+      padding: 0 10px;
+      background: linear-gradient(180deg, #f5fbff 0%, #edf5ff 100%);
+      border-bottom: 1px solid #d8e6fb;
+    }
+
+    .warehouse-modal .modal-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2d3b52;
+    }
+
+    .warehouse-modal .close-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 16px;
+      color: #fff;
+      background: #d88d64;
+      border-radius: 4px;
+      line-height: 18px;
+    }
+
+    .warehouse-modal .modal-body {
+      padding: 8px;
+    }
+
+    .warehouse-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #cfdcf0;
+      font-size: 13px;
+    }
+
+    .warehouse-table th,
+    .warehouse-table td {
+      border: 1px solid #cfdcf0;
+      padding: 8px 10px;
+      text-align: left;
+      color: #1f2d3d;
+    }
+
+    .warehouse-table th {
+      background: #f3f6fb;
+      font-weight: 600;
+    }
+
+    .warehouse-type-cell {
+      font-weight: 600;
+      color: #2b4f87;
+      width: 110px;
+    }
+
+    .child-sku-modal {
+      width: 420px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="mock-header">
+      <div class="mock-title">链接销售人员管理</div>
+      <div class="mock-toolbar">
+        <div class="chip">批量调整</div>
+        <div class="chip">导出</div>
+      </div>
+    </div>
+
+    <div class="mock-content">
+      <div class="mock-filter">
+        <div class="mock-input"></div>
+        <div class="mock-input"></div>
+        <div class="mock-input"></div>
+      </div>
+
+      <table class="mock-table">
+        <thead>
+          <tr>
+            <th class="select-cell">
+              <div class="select-header">
+                <input type="checkbox" id="headerSelectAll" aria-label="全选列表" />
+              </div>
+            </th>
+            <th>店铺/人员</th>
+            <th>首次到货时间</th>
+            <th>销售人员</th>
+            <th>7天</th>
+            <th>14天</th>
+            <th>30天</th>
+            <th>60天</th>
+            <th>90天</th>
+            <th>链接状态</th>
+            <th>站点</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="select-cell">
+              <div class="select-stack">
+                <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
+                <div class="action-dropdown row-action-dropdown">
+                  <button class="action-btn row-action-btn" type="button">
+                    <span>操作</span>
+                    <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+                      <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
+                  <div class="action-menu row-action-menu">
+                    <button type="button" data-action="标题优化">标题优化</button>
+                    <button type="button" data-action="亮点优化">亮点优化</button>
+                    <button type="button" data-action="描述优化">描述优化</button>
+                    <button type="button" data-action="编辑图片">编辑图片</button>
+                    <button type="button" data-action="图片优化">图片优化</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="shop-person-cell">
+                <strong>Amazon US</strong>
+                <span>陈苗</span>
+              </div>
+            </td>
+            <td>2026-04-10</td>
+            <td>
+              <div class="salesperson-cell">
+                <span class="salesperson-name">陈苗</span>
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
+                    <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td class="green">4</td>
+            <td class="blue">4</td>
+            <td class="red">4</td>
+            <td class="red">4</td>
+            <td class="red">4</td>
+            <td class="green">已转FBA</td>
+            <td>本地仓</td>
+          </tr>
+          <tr>
+            <td class="select-cell">
+              <div class="select-stack">
+                <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
+                <div class="action-dropdown row-action-dropdown">
+                  <button class="action-btn row-action-btn" type="button">
+                    <span>操作</span>
+                    <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+                      <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
+                  <div class="action-menu row-action-menu">
+                    <button type="button" data-action="标题优化">标题优化</button>
+                    <button type="button" data-action="亮点优化">亮点优化</button>
+                    <button type="button" data-action="描述优化">描述优化</button>
+                    <button type="button" data-action="编辑图片">编辑图片</button>
+                    <button type="button" data-action="图片优化">图片优化</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="shop-person-cell">
+                <strong>Amazon UK</strong>
+                <span>陈苗</span>
+              </div>
+            </td>
+            <td>2026-03-28</td>
+            <td>
+              <div class="salesperson-cell">
+                <span class="salesperson-name">陈苗</span>
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
+                    <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td class="green">6</td>
+            <td class="blue">8</td>
+            <td class="red">9</td>
+            <td class="red">12</td>
+            <td class="red">15</td>
+            <td class="green">已转FBA</td>
+            <td>海外仓</td>
+          </tr>
+          <tr>
+            <td class="select-cell">
+              <div class="select-stack">
+                <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
+                <div class="action-dropdown row-action-dropdown">
+                  <button class="action-btn row-action-btn" type="button">
+                    <span>操作</span>
+                    <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+                      <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
+                  <div class="action-menu row-action-menu">
+                    <button type="button" data-action="标题优化">标题优化</button>
+                    <button type="button" data-action="亮点优化">亮点优化</button>
+                    <button type="button" data-action="描述优化">描述优化</button>
+                    <button type="button" data-action="编辑图片">编辑图片</button>
+                    <button type="button" data-action="图片优化">图片优化</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="shop-person-cell">
+                <strong>Amazon DE</strong>
+                <span>陈苗</span>
+              </div>
+            </td>
+            <td>2026-03-05</td>
+            <td>
+              <div class="salesperson-cell">
+                <span class="salesperson-name">陈苗</span>
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
+                    <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td class="green">2</td>
+            <td class="blue">3</td>
+            <td class="red">5</td>
+            <td class="red">6</td>
+            <td class="red">8</td>
+            <td class="green">已转FBA</td>
+            <td>本地仓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="overlay" id="salespersonModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">设置销售人员</div>
+          <button class="close-icon" type="button" aria-label="关闭">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-row">
+            <label class="form-label"><span class="required">*</span>销售人员</label>
+            <div class="form-field">
+              <select class="select-input" id="salesperson">
+                <option>陈苗</option>
+                <option>廖崇英</option>
+                <option>徐旺</option>
+                <option>FBA业务人员</option>
+              </select>
+              <svg class="field-icon" viewBox="0 0 12 12" aria-hidden="true">
+                <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label"><span class="required">*</span>生效时间</label>
+            <div class="form-field" id="pickerWrap">
+              <div class="datetime-display placeholder" id="datetimeDisplay">请选择生效时间</div>
+              <svg class="field-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <rect x="2.5" y="3.5" width="11" height="10" rx="1.5" fill="none" stroke="#909399" stroke-width="1.2"></rect>
+                <path d="M5 2.5v3M11 2.5v3M2.5 6.5h11" fill="none" stroke="#909399" stroke-width="1.2" stroke-linecap="round"></path>
+              </svg>
+
+              <div class="picker-panel" id="pickerPanel">
+                <div class="picker-header">
+                  <button class="picker-nav" type="button" id="prevMonth">‹</button>
+                  <div class="picker-title" id="pickerTitle">2026年4月</div>
+                  <button class="picker-nav" type="button" id="nextMonth">›</button>
+                </div>
+
+                <div class="picker-weekdays">
+                  <div>日</div>
+                  <div>一</div>
+                  <div>二</div>
+                  <div>三</div>
+                  <div>四</div>
+                  <div>五</div>
+                  <div>六</div>
+                </div>
+
+                <div class="picker-grid" id="pickerGrid"></div>
+
+                <div class="picker-actions">
+                  <button class="picker-btn" type="button" id="cancelPicker">取消</button>
+                  <button class="picker-btn primary" type="button" id="confirmPicker">确定</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tips">点击日期输入框可展开日期选择器，确定后回填到“生效时间”字段。</div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" type="button" id="closeBtn">关闭</button>
+          <button class="btn btn-primary" type="button" id="saveBtn">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="imageTaskModal">
+      <div class="modal wide-modal">
+        <div class="modal-header">
+          <div class="modal-title">图片优化</div>
+          <button class="close-icon" type="button" aria-label="关闭" id="imageTaskCloseIcon">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="task-grid">
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>提报类型</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select medium danger" type="button" data-options="reportType" data-value="普通图片优化">普通图片优化</button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>是否精品特战</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select small" type="button" data-options="boutiqueFlag" data-value="否">否</button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label">SKU</div>
+              <div class="task-grid-field">
+                <div class="task-control medium danger">COMBO-SKU-001</div>
+                <button class="task-btn" type="button" id="childSkuLoadBtn">加载</button>
+                <button class="task-icon-btn" type="button" id="warehouseTrigger" aria-label="查看仓库库存">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M2.5 5.5 8 2.5l5.5 3v7H2.5z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+                    <path d="M2.5 5.5 8 8.5l5.5-3M8 8.5v4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label">产品中文名</div>
+              <div class="task-grid-field">
+                <div class="task-control full">桌面收纳盒</div>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>来样渠道</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select medium danger" type="button" data-options="sampleChannel" data-value="中国东莞1号仓库">中国东莞1号仓库</button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>日销量</div>
+              <div class="task-grid-field">
+                <div class="task-control large">0</div>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>店铺</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select large danger" type="button" data-options="shop" data-value="Amazon US 店铺">Amazon US 店铺</button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>MSKU</div>
+              <div class="task-grid-field">
+                <div class="task-control large danger">US-MSKU-001</div>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>销售人员</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select medium danger" type="button" data-options="salesperson" data-value="陈苗">陈苗</button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label">所属销售小组</div>
+              <div class="task-grid-field">
+                <div class="task-control medium">家居收纳组</div>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label">产品标签（节日）</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select large placeholder" type="button" data-options="festivalTag" data-placeholder="--产品标签--">--产品标签--</button>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label">附件</div>
+              <div class="task-grid-field">
+                <button class="task-btn" type="button">上传附件</button>
+                <span class="task-link">下载案例模板</span>
+              </div>
+            </div>
+
+            <div class="task-grid-row">
+              <div class="task-grid-label">优化内容</div>
+              <div class="task-grid-field">
+                <div class="task-textarea placeholder">对拍图的要求，600 个字数以内</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-footer">
+            <button class="btn" type="button" id="imageTaskCancelBtn">取消</button>
+            <button class="btn btn-primary" type="button" id="imageTaskSubmitBtn">提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="warehouseModal">
+      <div class="modal warehouse-modal">
+        <div class="modal-header">
+          <div class="modal-title">产品库存</div>
+          <button class="close-icon" type="button" aria-label="关闭" id="warehouseCloseIcon">×</button>
+        </div>
+
+        <div class="modal-body">
+          <table class="warehouse-table">
+            <thead>
+              <tr>
+                <th>仓库类型</th>
+                <th>库存名称</th>
+                <th>可用库存</th>
+                <th>已保护库存</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="warehouse-type-cell" rowspan="2">本地仓</td>
+                <td>中国东莞1号仓库</td>
+                <td>3</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>中国义乌1号仓库</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="childSkuModal">
+      <div class="modal child-sku-modal">
+        <div class="modal-header">
+          <div class="modal-title">选择子SKU</div>
+          <button class="close-icon" type="button" aria-label="关闭" id="childSkuCloseIcon">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="task-grid">
+            <div class="task-grid-row">
+              <div class="task-grid-label"><span class="required">*</span>子SKU</div>
+              <div class="task-grid-field">
+                <button class="task-control task-select-control select full" type="button" id="childSkuSelectControl" data-options="childSku" data-value="CHILD-SKU-001">CHILD-SKU-001</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" type="button" id="childSkuCancelBtn">取消</button>
+          <button class="btn btn-primary" type="button" id="childSkuConfirmBtn">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-dropdown-panel" id="taskDropdownPanel">
+      <div class="task-dropdown-options" id="taskDropdownOptions"></div>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById("salespersonModal");
+    const imageTaskModal = document.getElementById("imageTaskModal");
+    const warehouseModal = document.getElementById("warehouseModal");
+    const childSkuModal = document.getElementById("childSkuModal");
+    const datetimeDisplay = document.getElementById("datetimeDisplay");
+    const pickerPanel = document.getElementById("pickerPanel");
+    const pickerWrap = document.getElementById("pickerWrap");
+    const pickerGrid = document.getElementById("pickerGrid");
+    const pickerTitle = document.getElementById("pickerTitle");
+    const prevMonth = document.getElementById("prevMonth");
+    const nextMonth = document.getElementById("nextMonth");
+    const confirmPicker = document.getElementById("confirmPicker");
+    const cancelPicker = document.getElementById("cancelPicker");
+    const closeBtn = document.getElementById("closeBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const salespersonSelect = document.getElementById("salesperson");
+    const closeIcon = document.querySelector(".close-icon");
+    const editButtons = document.querySelectorAll(".edit-salesperson-btn");
+    const headerSelectAll = document.getElementById("headerSelectAll");
+    const rowCheckboxes = document.querySelectorAll(".row-checkbox");
+    const rowActionDropdowns = document.querySelectorAll(".row-action-dropdown");
+    const rowActionButtons = document.querySelectorAll(".row-action-btn");
+    const rowActionMenuButtons = document.querySelectorAll(".row-action-menu button");
+    const imageTaskCloseIcon = document.getElementById("imageTaskCloseIcon");
+    const imageTaskCancelBtn = document.getElementById("imageTaskCancelBtn");
+    const imageTaskSubmitBtn = document.getElementById("imageTaskSubmitBtn");
+    const childSkuLoadBtn = document.getElementById("childSkuLoadBtn");
+    const warehouseTrigger = document.getElementById("warehouseTrigger");
+    const warehouseCloseIcon = document.getElementById("warehouseCloseIcon");
+    const childSkuCloseIcon = document.getElementById("childSkuCloseIcon");
+    const childSkuCancelBtn = document.getElementById("childSkuCancelBtn");
+    const childSkuConfirmBtn = document.getElementById("childSkuConfirmBtn");
+    const taskSelectControls = document.querySelectorAll(".task-select-control");
+    const taskDropdownPanel = document.getElementById("taskDropdownPanel");
+    const taskDropdownOptions = document.getElementById("taskDropdownOptions");
+
+    const now = new Date();
+    let viewYear = now.getFullYear();
+    let viewMonth = now.getMonth();
+    let selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let tempDate = new Date(selectedDate);
+    let currentEditingRow = null;
+    let activeTaskSelect = null;
+
+    const taskDropdownData = {
+      reportType: ["普通图片优化", "精优图片优化", "A+图片提报"],
+      boutiqueFlag: ["是", "否"],
+      childSku: ["CHILD-SKU-001", "CHILD-SKU-002", "CHILD-SKU-003"],
+      sampleChannel: ["中国东莞1号仓库", "送样", "买样"],
+      shop: ["Amazon US 店铺", "Amazon UK 店铺", "Amazon DE 店铺"],
+      salesperson: ["陈苗", "廖崇英", "徐旺", "FBA业务人员"],
+      festivalTag: ["节日用品", "母亲节", "儿童节", "圣诞节", "开学季", "万圣节"]
+    };
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function formatDate(date) {
+      return [
+        date.getFullYear(),
+        pad(date.getMonth() + 1),
+        pad(date.getDate())
+      ].join("-");
+    }
+
+    function renderCalendar(year, month) {
+      pickerTitle.textContent = year + "年" + (month + 1) + "月";
+      pickerGrid.innerHTML = "";
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const prevMonthDays = new Date(year, month, 0).getDate();
+      const totalCells = 42;
+
+      for (let i = 0; i < totalCells; i += 1) {
+        const dayBtn = document.createElement("button");
+        dayBtn.type = "button";
+        dayBtn.className = "day";
+
+        let dateObj;
+        let text;
+
+        if (i < firstDay) {
+          text = prevMonthDays - firstDay + i + 1;
+          dateObj = new Date(year, month - 1, text);
+          dayBtn.classList.add("muted");
+        } else if (i >= firstDay + daysInMonth) {
+          text = i - firstDay - daysInMonth + 1;
+          dateObj = new Date(year, month + 1, text);
+          dayBtn.classList.add("muted");
+        } else {
+          text = i - firstDay + 1;
+          dateObj = new Date(year, month, text);
+        }
+
+        dayBtn.textContent = text;
+        const isSelected =
+          tempDate.getFullYear() === dateObj.getFullYear() &&
+          tempDate.getMonth() === dateObj.getMonth() &&
+          tempDate.getDate() === dateObj.getDate();
+
+        if (isSelected) {
+          dayBtn.classList.add("selected");
+        }
+
+        dayBtn.addEventListener("click", () => {
+          tempDate = new Date(
+            dateObj.getFullYear(),
+            dateObj.getMonth(),
+            dateObj.getDate()
+          );
+          viewYear = tempDate.getFullYear();
+          viewMonth = tempDate.getMonth();
+          renderCalendar(viewYear, viewMonth);
+        });
+
+        pickerGrid.appendChild(dayBtn);
+      }
+    }
+
+    function openPicker() {
+      pickerPanel.classList.add("open");
+      datetimeDisplay.classList.add("active");
+      renderCalendar(viewYear, viewMonth);
+    }
+
+    function closePicker() {
+      pickerPanel.classList.remove("open");
+      datetimeDisplay.classList.remove("active");
+    }
+
+    function commitTempDate() {
+      selectedDate = new Date(tempDate);
+      datetimeDisplay.textContent = formatDate(selectedDate);
+      datetimeDisplay.classList.remove("placeholder");
+    }
+
+    function openModal(row) {
+      currentEditingRow = row;
+      if (currentEditingRow) {
+        const nameElement = currentEditingRow.querySelector(".salesperson-name");
+        if (nameElement) {
+          salespersonSelect.value = nameElement.textContent.trim();
+        }
+      }
+      tempDate = new Date(selectedDate);
+      viewYear = tempDate.getFullYear();
+      viewMonth = tempDate.getMonth();
+      overlay.classList.add("open");
+    }
+
+    function closeModal() {
+      closePicker();
+      overlay.classList.remove("open");
+      currentEditingRow = null;
+    }
+
+    function openImageTaskModal() {
+      closeTaskDropdown();
+      imageTaskModal.classList.add("open");
+    }
+
+    function closeImageTaskModal() {
+      closeTaskDropdown();
+      imageTaskModal.classList.remove("open");
+    }
+
+    function openWarehouseModal() {
+      closeTaskDropdown();
+      warehouseModal.classList.add("open");
+    }
+
+    function closeWarehouseModal() {
+      warehouseModal.classList.remove("open");
+    }
+
+    function openChildSkuModal() {
+      closeTaskDropdown();
+      childSkuModal.classList.add("open");
+    }
+
+    function closeChildSkuModal() {
+      closeTaskDropdown();
+      childSkuModal.classList.remove("open");
+    }
+
+    function renderTaskDropdownOptions() {
+      if (!activeTaskSelect) {
+        taskDropdownOptions.innerHTML = "";
+        return;
+      }
+
+      const optionKey = activeTaskSelect.dataset.options;
+      const options = taskDropdownData[optionKey] || [];
+
+      if (options.length === 0) {
+        taskDropdownOptions.innerHTML = '<div class="task-dropdown-empty">暂无匹配枚举</div>';
+        return;
+      }
+
+      taskDropdownOptions.innerHTML = options.map((item) => (
+        '<button class="task-dropdown-option" type="button" data-value="' + item + '">' + item + "</button>"
+      )).join("");
+    }
+
+    function closeTaskDropdown() {
+      taskDropdownPanel.classList.remove("open");
+      if (activeTaskSelect) {
+        activeTaskSelect.classList.remove("open");
+      }
+      activeTaskSelect = null;
+    }
+
+    function openTaskDropdown(control) {
+      const isSameControl = activeTaskSelect === control && taskDropdownPanel.classList.contains("open");
+      closeTaskDropdown();
+      if (isSameControl) {
+        return;
+      }
+
+      activeTaskSelect = control;
+      activeTaskSelect.classList.add("open");
+
+      const rect = control.getBoundingClientRect();
+      taskDropdownPanel.style.left = rect.left + "px";
+      taskDropdownPanel.style.top = (rect.bottom + 4) + "px";
+      taskDropdownPanel.style.width = Math.max(rect.width, 220) + "px";
+      taskDropdownPanel.classList.add("open");
+      renderTaskDropdownOptions();
+    }
+
+    function applyTaskDropdownValue(value) {
+      if (!activeTaskSelect) {
+        return;
+      }
+
+      activeTaskSelect.textContent = value;
+      activeTaskSelect.dataset.value = value;
+      activeTaskSelect.classList.remove("placeholder");
+      closeTaskDropdown();
+    }
+
+    function setAllSelection(checked) {
+      rowCheckboxes.forEach((checkbox) => {
+        checkbox.checked = checked;
+      });
+      headerSelectAll.checked = checked;
+      headerSelectAll.indeterminate = false;
+    }
+
+    function syncSelectAllState() {
+      const checkedCount = Array.from(rowCheckboxes).filter((checkbox) => checkbox.checked).length;
+      const allChecked = checkedCount === rowCheckboxes.length;
+      const partiallyChecked = checkedCount > 0 && checkedCount < rowCheckboxes.length;
+
+      headerSelectAll.checked = allChecked;
+      headerSelectAll.indeterminate = partiallyChecked;
+    }
+
+    function toggleActionMenu(targetDropdown) {
+      const targetMenu = targetDropdown.querySelector(".action-menu");
+      const shouldOpen = !targetMenu.classList.contains("open");
+      closeActionMenu();
+      if (shouldOpen) {
+        targetMenu.classList.add("open");
+      }
+    }
+
+    function closeActionMenu() {
+      rowActionDropdowns.forEach((dropdown) => {
+        const menu = dropdown.querySelector(".action-menu");
+        if (menu) {
+          menu.classList.remove("open");
+        }
+      });
+    }
+
+    datetimeDisplay.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (pickerPanel.classList.contains("open")) {
+        closePicker();
+      } else {
+        openPicker();
+      }
+    });
+
+    prevMonth.addEventListener("click", () => {
+      viewMonth -= 1;
+      if (viewMonth < 0) {
+        viewMonth = 11;
+        viewYear -= 1;
+      }
+      renderCalendar(viewYear, viewMonth);
+    });
+
+    nextMonth.addEventListener("click", () => {
+      viewMonth += 1;
+      if (viewMonth > 11) {
+        viewMonth = 0;
+        viewYear += 1;
+      }
+      renderCalendar(viewYear, viewMonth);
+    });
+
+    confirmPicker.addEventListener("click", () => {
+      commitTempDate();
+      closePicker();
+    });
+
+    cancelPicker.addEventListener("click", () => {
+      tempDate = new Date(selectedDate);
+      closePicker();
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!pickerWrap.contains(event.target)) {
+        closePicker();
+      }
+      if (!event.target.closest(".row-action-dropdown")) {
+        closeActionMenu();
+      }
+      if (!event.target.closest(".task-dropdown-panel") && !event.target.closest(".task-select-control")) {
+        closeTaskDropdown();
+      }
+    });
+
+    headerSelectAll.addEventListener("change", () => {
+      setAllSelection(headerSelectAll.checked);
+    });
+
+    rowCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", syncSelectAllState);
+    });
+
+    rowActionButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleActionMenu(button.closest(".row-action-dropdown"));
+      });
+    });
+
+    taskSelectControls.forEach((control) => {
+      control.addEventListener("click", (event) => {
+        event.stopPropagation();
+        openTaskDropdown(control);
+      });
+    });
+
+    taskDropdownOptions.addEventListener("click", (event) => {
+      const option = event.target.closest(".task-dropdown-option");
+      if (!option) {
+        return;
+      }
+      applyTaskDropdownValue(option.dataset.value);
+    });
+
+    rowActionMenuButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const actionName = button.dataset.action;
+        closeActionMenu();
+
+        if (actionName === "图片优化") {
+          openImageTaskModal();
+          return;
+        }
+
+        alert("原型演示：" + actionName);
+      });
+    });
+
+    editButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        openModal(button.closest("tr"));
+      });
+    });
+
+    closeBtn.addEventListener("click", closeModal);
+    closeIcon.addEventListener("click", closeModal);
+
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) {
+        closeModal();
+      }
+    });
+
+    imageTaskCloseIcon.addEventListener("click", closeImageTaskModal);
+
+    imageTaskCancelBtn.addEventListener("click", closeImageTaskModal);
+
+    imageTaskSubmitBtn.addEventListener("click", () => {
+      closeImageTaskModal();
+    });
+
+    warehouseTrigger.addEventListener("click", () => {
+      openWarehouseModal();
+    });
+
+    warehouseCloseIcon.addEventListener("click", closeWarehouseModal);
+
+    childSkuLoadBtn.addEventListener("click", () => {
+      openChildSkuModal();
+    });
+
+    childSkuCloseIcon.addEventListener("click", closeChildSkuModal);
+    childSkuCancelBtn.addEventListener("click", closeChildSkuModal);
+    childSkuConfirmBtn.addEventListener("click", closeChildSkuModal);
+
+    imageTaskModal.addEventListener("click", (event) => {
+      if (event.target === imageTaskModal) {
+        closeImageTaskModal();
+      }
+    });
+
+    warehouseModal.addEventListener("click", (event) => {
+      if (event.target === warehouseModal) {
+        closeWarehouseModal();
+      }
+    });
+
+    childSkuModal.addEventListener("click", (event) => {
+      if (event.target === childSkuModal) {
+        closeChildSkuModal();
+      }
+    });
+
+    saveBtn.addEventListener("click", () => {
+      const salesperson = salespersonSelect.value;
+      const effectiveTime = datetimeDisplay.classList.contains("placeholder")
+        ? "未选择"
+        : datetimeDisplay.textContent;
+
+      if (currentEditingRow) {
+        const nameElement = currentEditingRow.querySelector(".salesperson-name");
+        if (nameElement) {
+          nameElement.textContent = salesperson;
+        }
+      }
+
+      alert("原型演示：已保存\n销售人员：" + salesperson + "\n生效时间：" + effectiveTime);
+      closeModal();
+    });
+
+    renderCalendar(viewYear, viewMonth);
+    syncSelectAllState();
+  </script>
+</body>
+</html>
