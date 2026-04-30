@@ -271,7 +271,7 @@
     }
 
     .wide-modal {
-      width: 680px;
+      width: 840px;
     }
 
     .modal-header {
@@ -718,6 +718,16 @@
       flex-wrap: wrap;
     }
 
+    .task-upload-box.is-required {
+      border-color: #f3c6c6;
+      background: #fff7f7;
+    }
+
+    .task-upload-box.is-valid {
+      border-color: #b7eb8f;
+      background: #f6ffed;
+    }
+
     .task-upload-text {
       font-size: 12px;
       line-height: 20px;
@@ -727,6 +737,46 @@
     .task-upload-text strong {
       color: #409eff;
       font-weight: 600;
+    }
+
+    .task-upload-file {
+      width: 100%;
+      font-size: 12px;
+      color: #67c23a;
+      line-height: 18px;
+    }
+
+    .conditional-required {
+      display: none;
+      color: #f56c6c;
+      margin-right: 4px;
+    }
+
+    .conditional-required.active {
+      display: inline;
+    }
+
+    .field-helper {
+      width: 100%;
+      font-size: 12px;
+      line-height: 18px;
+      color: #909399;
+      margin-top: 2px;
+    }
+
+    .field-helper.error {
+      color: #f56c6c;
+    }
+
+    textarea.task-textarea {
+      resize: vertical;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .task-textarea.is-required {
+      border-color: #f3c6c6;
+      background: #fff7f7;
     }
 
     .sku-radio-group {
@@ -1310,19 +1360,23 @@
             </div>
 
             <div class="task-grid-row">
-              <div class="task-grid-label">附件</div>
+              <div class="task-grid-label"><span class="conditional-required" id="attachmentRequiredMark">*</span>附件</div>
               <div class="task-grid-field">
-                <div class="task-upload-box">
+                <div class="task-upload-box" id="attachmentUploadBox">
                   <div class="task-upload-text">拖入文件进行上传，或 <strong>点击选择本地文件上传</strong></div>
+                  <div class="task-upload-file" id="attachmentFileName">未上传附件</div>
                   <a class="task-link" href="file:///C:/Users/luhuaxin/Desktop/%E6%A1%88%E4%BE%8B%E6%A8%A1%E6%9D%BF.xlsx" download="案例模板.xlsx">下载案例模板</a>
+                  <input id="attachmentInput" type="file" hidden />
                 </div>
+                <div class="field-helper" id="attachmentHelper">普通图片优化时，附件非必填；精优图片优化、A+图片提报时，附件必填。</div>
               </div>
             </div>
 
             <div class="task-grid-row">
-              <div class="task-grid-label">优化内容</div>
+              <div class="task-grid-label"><span class="conditional-required" id="contentRequiredMark">*</span>优化内容</div>
               <div class="task-grid-field">
-                <div class="task-textarea placeholder">对拍图的要求，600 个字数以内</div>
+                <textarea class="task-textarea" id="contentInput" placeholder="对拍图的要求，600 个字数以内"></textarea>
+                <div class="field-helper" id="contentHelper">普通图片优化时，优化内容非必填；精优图片优化、A+图片提报时，优化内容必填。</div>
               </div>
             </div>
           </div>
@@ -1408,6 +1462,14 @@
     const taskDropdownOptions = document.getElementById("taskDropdownOptions");
     const skuChoiceRadios = document.querySelectorAll('input[name="skuChoice"]');
     const productNameDisplay = document.getElementById("productNameDisplay");
+    const attachmentUploadBox = document.getElementById("attachmentUploadBox");
+    const attachmentInput = document.getElementById("attachmentInput");
+    const attachmentFileName = document.getElementById("attachmentFileName");
+    const attachmentRequiredMark = document.getElementById("attachmentRequiredMark");
+    const attachmentHelper = document.getElementById("attachmentHelper");
+    const contentInput = document.getElementById("contentInput");
+    const contentRequiredMark = document.getElementById("contentRequiredMark");
+    const contentHelper = document.getElementById("contentHelper");
 
     const now = new Date();
     let viewYear = now.getFullYear();
@@ -1557,6 +1619,57 @@
       productNameDisplay.textContent = selectedSku.dataset.productName || "";
     }
 
+    function isAdvancedReportType() {
+      const reportTypeControl = document.querySelector('[data-options="reportType"]');
+      const reportType = reportTypeControl ? reportTypeControl.dataset.value || reportTypeControl.textContent.trim() : "";
+      return reportType === "精优图片优化" || reportType === "A+图片提报";
+    }
+
+    function updateConditionalRequiredUI() {
+      const required = isAdvancedReportType();
+      attachmentRequiredMark.classList.toggle("active", required);
+      contentRequiredMark.classList.toggle("active", required);
+
+      if (!required) {
+        attachmentUploadBox.classList.remove("is-required");
+        contentInput.classList.remove("is-required");
+        attachmentHelper.classList.remove("error");
+        contentHelper.classList.remove("error");
+        attachmentHelper.textContent = "普通图片优化时，附件非必填；精优图片优化、A+图片提报时，附件必填。";
+        contentHelper.textContent = "普通图片优化时，优化内容非必填；精优图片优化、A+图片提报时，优化内容必填。";
+      }
+    }
+
+    function setAttachmentFile(fileName) {
+      attachmentFileName.textContent = "已上传：" + fileName;
+      attachmentUploadBox.classList.add("is-valid");
+      attachmentUploadBox.classList.remove("is-required");
+      attachmentHelper.classList.remove("error");
+      attachmentHelper.textContent = "附件上传成功。";
+    }
+
+    function validateImageTaskForm() {
+      const required = isAdvancedReportType();
+      let isValid = true;
+
+      if (required && attachmentFileName.textContent === "未上传附件") {
+        attachmentUploadBox.classList.add("is-required");
+        attachmentUploadBox.classList.remove("is-valid");
+        attachmentHelper.classList.add("error");
+        attachmentHelper.textContent = "当前提报类型下，附件为必填项，请先上传附件。";
+        isValid = false;
+      }
+
+      if (required && !contentInput.value.trim()) {
+        contentInput.classList.add("is-required");
+        contentHelper.classList.add("error");
+        contentHelper.textContent = "当前提报类型下，优化内容为必填项，请填写优化内容。";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
     function renderTaskDropdownOptions() {
       if (!activeTaskSelect) {
         taskDropdownOptions.innerHTML = "";
@@ -1607,10 +1720,15 @@
         return;
       }
 
+      const changedControl = activeTaskSelect;
       activeTaskSelect.textContent = value;
       activeTaskSelect.dataset.value = value;
       activeTaskSelect.classList.remove("placeholder");
       closeTaskDropdown();
+
+      if (changedControl.dataset.options === "reportType") {
+        updateConditionalRequiredUI();
+      }
     }
 
     function setAllSelection(checked) {
@@ -1731,6 +1849,50 @@
       applyTaskDropdownValue(option.dataset.value);
     });
 
+    attachmentUploadBox.addEventListener("click", (event) => {
+      if (event.target.closest(".task-link")) {
+        return;
+      }
+      attachmentInput.click();
+    });
+
+    attachmentUploadBox.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      attachmentUploadBox.classList.add("is-valid");
+    });
+
+    attachmentUploadBox.addEventListener("dragleave", () => {
+      if (attachmentFileName.textContent === "未上传附件") {
+        attachmentUploadBox.classList.remove("is-valid");
+      }
+    });
+
+    attachmentUploadBox.addEventListener("drop", (event) => {
+      event.preventDefault();
+      const file = event.dataTransfer.files && event.dataTransfer.files[0];
+      if (file) {
+        setAttachmentFile(file.name);
+      }
+    });
+
+    attachmentInput.addEventListener("change", () => {
+      const file = attachmentInput.files && attachmentInput.files[0];
+      if (file) {
+        setAttachmentFile(file.name);
+      }
+    });
+
+    contentInput.addEventListener("input", () => {
+      if (contentInput.value.trim()) {
+        contentInput.classList.remove("is-required");
+        contentHelper.classList.remove("error");
+        contentHelper.textContent = "优化内容已填写。";
+      } else if (!isAdvancedReportType()) {
+        contentHelper.classList.remove("error");
+        contentHelper.textContent = "普通图片优化时，优化内容非必填；精优图片优化、A+图片提报时，优化内容必填。";
+      }
+    });
+
     rowActionMenuButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const actionName = button.dataset.action;
@@ -1765,6 +1927,9 @@
     imageTaskCancelBtn.addEventListener("click", closeImageTaskModal);
 
     imageTaskSubmitBtn.addEventListener("click", () => {
+      if (!validateImageTaskForm()) {
+        return;
+      }
       closeImageTaskModal();
     });
 
@@ -1806,6 +1971,7 @@
     renderCalendar(viewYear, viewMonth);
     syncSelectAllState();
     syncProductNameBySku();
+    updateConditionalRequiredUI();
   </script>
 </body>
 </html>
