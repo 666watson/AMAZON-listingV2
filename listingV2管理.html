@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>设置销售人员-新增生效时间-交互原型</title>
+  <title>listingV2管理</title>
   <style>
     * {
       box-sizing: border-box;
@@ -560,6 +560,52 @@
       margin-right: 2px;
     }
 
+    .label-help {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      margin-left: 6px;
+      border-radius: 50%;
+      background: #ecf5ff;
+      border: 1px solid #b7d7ff;
+      color: #409eff;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 18px;
+      cursor: help;
+      flex: 0 0 auto;
+      box-shadow: 0 1px 4px rgba(64, 158, 255, 0.12);
+    }
+
+    .label-help-tooltip {
+      position: absolute;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 270px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      background: rgba(48, 49, 51, 0.95);
+      color: #fff;
+      font-size: 12px;
+      line-height: 20px;
+      text-align: left;
+      box-shadow: 0 6px 18px rgba(31, 45, 61, 0.18);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .label-help:hover .label-help-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
     .task-grid-field {
       padding: 6px 10px;
       display: flex;
@@ -656,6 +702,100 @@
       font-size: 12px;
       text-decoration: underline;
       cursor: pointer;
+    }
+
+    .task-upload-box {
+      width: 100%;
+      min-height: 60px;
+      padding: 10px 12px;
+      border: 1px dashed #cfd8e3;
+      border-radius: 4px;
+      background: #fbfcfe;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .task-upload-text {
+      font-size: 12px;
+      line-height: 20px;
+      color: #606266;
+    }
+
+    .task-upload-text strong {
+      color: #409eff;
+      font-weight: 600;
+    }
+
+    .sku-radio-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+    }
+
+    .sku-radio-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #606266;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .sku-radio-item input {
+      margin: 0;
+      accent-color: #409eff;
+      cursor: pointer;
+    }
+
+    .sku-radio-code {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border: 1px solid #cfd8e3;
+      border-radius: 4px;
+      background: #fff;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .sku-radio-item input:checked + .sku-radio-code {
+      border-color: #409eff;
+      background: #ecf5ff;
+      color: #409eff;
+    }
+
+    .sku-radio-code.group-sku {
+      padding-right: 20px;
+    }
+
+    .sku-radio-code.group-sku::before {
+      content: "组";
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 14px;
+      height: 14px;
+      border-radius: 7px;
+      background: #f56c6c;
+      color: #fff;
+      font-size: 9px;
+      line-height: 14px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(245, 108, 108, 0.22);
+    }
+
+    .sku-actions-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 2px;
     }
 
     .task-icon-btn {
@@ -809,7 +949,7 @@
 <body>
   <div class="page">
     <div class="mock-header">
-      <div class="mock-title">链接销售人员管理</div>
+      <div class="mock-title">listingV2管理</div>
       <div class="mock-toolbar">
         <div class="chip">批量调整</div>
         <div class="chip">导出</div>
@@ -1082,23 +1222,41 @@
             </div>
 
             <div class="task-grid-row">
-              <div class="task-grid-label">SKU</div>
+              <div class="task-grid-label">SKU<span class="label-help">?<span class="label-help-tooltip">● 非组合SKU默认 listing 关联SKU；<br />● 组合SKU展示组合SKU及子SKU，默认选中其中一个子SKU</span></span></div>
               <div class="task-grid-field">
-                <div class="task-control medium danger">COMBO-SKU-001</div>
-                <button class="task-btn" type="button" id="childSkuLoadBtn">加载</button>
-                <button class="task-icon-btn" type="button" id="warehouseTrigger" aria-label="查看仓库库存">
-                  <svg viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M2.5 5.5 8 2.5l5.5 3v7H2.5z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
-                    <path d="M2.5 5.5 8 8.5l5.5-3M8 8.5v4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
-                </button>
+                <div class="sku-radio-group">
+                  <label class="sku-radio-item">
+                    <input type="radio" name="skuChoice" data-sku="COMBO-SKU-001" data-product-name="桌面收纳盒组合装" />
+                    <span class="sku-radio-code group-sku">COMBO-SKU-001</span>
+                  </label>
+                  <label class="sku-radio-item">
+                    <input type="radio" name="skuChoice" checked data-sku="CHILD-SKU-001" data-product-name="桌面收纳盒-白色款" />
+                    <span class="sku-radio-code">CHILD-SKU-001</span>
+                  </label>
+                  <label class="sku-radio-item">
+                    <input type="radio" name="skuChoice" data-sku="CHILD-SKU-002" data-product-name="桌面收纳盒-灰色款" />
+                    <span class="sku-radio-code">CHILD-SKU-002</span>
+                  </label>
+                  <label class="sku-radio-item">
+                    <input type="radio" name="skuChoice" data-sku="CHILD-SKU-003" data-product-name="桌面收纳盒-蓝色款" />
+                    <span class="sku-radio-code">CHILD-SKU-003</span>
+                  </label>
+                  <div class="sku-actions-row">
+                    <button class="task-icon-btn" type="button" id="warehouseTrigger" aria-label="查询当前选中SKU的实时库存数据">
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M2.5 5.5 8 2.5l5.5 3v7H2.5z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+                        <path d="M2.5 5.5 8 8.5l5.5-3M8 8.5v4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="task-grid-row">
               <div class="task-grid-label">产品中文名</div>
               <div class="task-grid-field">
-                <div class="task-control full">桌面收纳盒</div>
+                <div class="task-control full" id="productNameDisplay">桌面收纳盒-白色款</div>
               </div>
             </div>
 
@@ -1154,8 +1312,10 @@
             <div class="task-grid-row">
               <div class="task-grid-label">附件</div>
               <div class="task-grid-field">
-                <button class="task-btn" type="button">上传附件</button>
-                <span class="task-link">下载案例模板</span>
+                <div class="task-upload-box">
+                  <div class="task-upload-text">拖入文件进行上传，或 <strong>点击选择本地文件上传</strong></div>
+                  <a class="task-link" href="file:///C:/Users/luhuaxin/Desktop/%E6%A1%88%E4%BE%8B%E6%A8%A1%E6%9D%BF.xlsx" download="案例模板.xlsx">下载案例模板</a>
+                </div>
               </div>
             </div>
 
@@ -1210,31 +1370,6 @@
       </div>
     </div>
 
-    <div class="overlay" id="childSkuModal">
-      <div class="modal child-sku-modal">
-        <div class="modal-header">
-          <div class="modal-title">选择子SKU</div>
-          <button class="close-icon" type="button" aria-label="关闭" id="childSkuCloseIcon">×</button>
-        </div>
-
-        <div class="modal-body">
-          <div class="task-grid">
-            <div class="task-grid-row">
-              <div class="task-grid-label"><span class="required">*</span>子SKU</div>
-              <div class="task-grid-field">
-                <button class="task-control task-select-control select full" type="button" id="childSkuSelectControl" data-options="childSku" data-value="CHILD-SKU-001">CHILD-SKU-001</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn" type="button" id="childSkuCancelBtn">取消</button>
-          <button class="btn btn-primary" type="button" id="childSkuConfirmBtn">确定</button>
-        </div>
-      </div>
-    </div>
-
     <div class="task-dropdown-panel" id="taskDropdownPanel">
       <div class="task-dropdown-options" id="taskDropdownOptions"></div>
     </div>
@@ -1244,7 +1379,6 @@
     const overlay = document.getElementById("salespersonModal");
     const imageTaskModal = document.getElementById("imageTaskModal");
     const warehouseModal = document.getElementById("warehouseModal");
-    const childSkuModal = document.getElementById("childSkuModal");
     const datetimeDisplay = document.getElementById("datetimeDisplay");
     const pickerPanel = document.getElementById("pickerPanel");
     const pickerWrap = document.getElementById("pickerWrap");
@@ -1267,15 +1401,13 @@
     const imageTaskCloseIcon = document.getElementById("imageTaskCloseIcon");
     const imageTaskCancelBtn = document.getElementById("imageTaskCancelBtn");
     const imageTaskSubmitBtn = document.getElementById("imageTaskSubmitBtn");
-    const childSkuLoadBtn = document.getElementById("childSkuLoadBtn");
     const warehouseTrigger = document.getElementById("warehouseTrigger");
     const warehouseCloseIcon = document.getElementById("warehouseCloseIcon");
-    const childSkuCloseIcon = document.getElementById("childSkuCloseIcon");
-    const childSkuCancelBtn = document.getElementById("childSkuCancelBtn");
-    const childSkuConfirmBtn = document.getElementById("childSkuConfirmBtn");
     const taskSelectControls = document.querySelectorAll(".task-select-control");
     const taskDropdownPanel = document.getElementById("taskDropdownPanel");
     const taskDropdownOptions = document.getElementById("taskDropdownOptions");
+    const skuChoiceRadios = document.querySelectorAll('input[name="skuChoice"]');
+    const productNameDisplay = document.getElementById("productNameDisplay");
 
     const now = new Date();
     let viewYear = now.getFullYear();
@@ -1288,7 +1420,6 @@
     const taskDropdownData = {
       reportType: ["普通图片优化", "精优图片优化", "A+图片提报"],
       boutiqueFlag: ["是", "否"],
-      childSku: ["CHILD-SKU-001", "CHILD-SKU-002", "CHILD-SKU-003"],
       sampleChannel: ["中国东莞1号仓库", "送样", "买样"],
       shop: ["Amazon US 店铺", "Amazon UK 店铺", "Amazon DE 店铺"],
       salesperson: ["陈苗", "廖崇英", "徐旺", "FBA业务人员"],
@@ -1418,14 +1549,12 @@
       warehouseModal.classList.remove("open");
     }
 
-    function openChildSkuModal() {
-      closeTaskDropdown();
-      childSkuModal.classList.add("open");
-    }
-
-    function closeChildSkuModal() {
-      closeTaskDropdown();
-      childSkuModal.classList.remove("open");
+    function syncProductNameBySku() {
+      const selectedSku = Array.from(skuChoiceRadios).find((radio) => radio.checked);
+      if (!selectedSku) {
+        return;
+      }
+      productNameDisplay.textContent = selectedSku.dataset.productName || "";
     }
 
     function renderTaskDropdownOptions() {
@@ -1576,6 +1705,10 @@
       checkbox.addEventListener("change", syncSelectAllState);
     });
 
+    skuChoiceRadios.forEach((radio) => {
+      radio.addEventListener("change", syncProductNameBySku);
+    });
+
     rowActionButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         event.stopPropagation();
@@ -1641,14 +1774,6 @@
 
     warehouseCloseIcon.addEventListener("click", closeWarehouseModal);
 
-    childSkuLoadBtn.addEventListener("click", () => {
-      openChildSkuModal();
-    });
-
-    childSkuCloseIcon.addEventListener("click", closeChildSkuModal);
-    childSkuCancelBtn.addEventListener("click", closeChildSkuModal);
-    childSkuConfirmBtn.addEventListener("click", closeChildSkuModal);
-
     imageTaskModal.addEventListener("click", (event) => {
       if (event.target === imageTaskModal) {
         closeImageTaskModal();
@@ -1658,12 +1783,6 @@
     warehouseModal.addEventListener("click", (event) => {
       if (event.target === warehouseModal) {
         closeWarehouseModal();
-      }
-    });
-
-    childSkuModal.addEventListener("click", (event) => {
-      if (event.target === childSkuModal) {
-        closeChildSkuModal();
       }
     });
 
@@ -1686,6 +1805,7 @@
 
     renderCalendar(viewYear, viewMonth);
     syncSelectAllState();
+    syncProductNameBySku();
   </script>
 </body>
 </html>
