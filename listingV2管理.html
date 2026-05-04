@@ -19,12 +19,14 @@
     .page {
       position: relative;
       min-height: 100vh;
-      overflow: hidden;
+      overflow: visible;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(243, 245, 248, 0.92) 100%);
     }
 
     .mock-header {
+      position: relative;
+      z-index: 20;
       height: 72px;
       padding: 0 28px;
       display: flex;
@@ -33,6 +35,7 @@
       background: #ffffff;
       border-bottom: 1px solid #e8edf3;
       color: #5a6472;
+      overflow: visible;
     }
 
     .mock-title {
@@ -58,8 +61,125 @@
       color: #5f6b7a;
     }
 
+    .toolbar-dropdown {
+      position: relative;
+      z-index: 30;
+    }
+
+    .toolbar-dropdown[open] {
+      z-index: 260;
+    }
+
+    .toolbar-dropdown-btn {
+      height: 32px;
+      padding: 0 14px;
+      border: 1px solid #d8e0eb;
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #5f6b7a;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .toolbar-dropdown-btn svg {
+      width: 12px;
+      height: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .toolbar-dropdown[open] .toolbar-dropdown-btn svg,
+    .toolbar-dropdown.open .toolbar-dropdown-btn svg {
+      transform: rotate(180deg);
+    }
+
+    .toolbar-dropdown-btn::-webkit-details-marker {
+      display: none;
+    }
+
+    .toolbar-dropdown-btn::marker {
+      display: none;
+    }
+
+    .toolbar-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 120px;
+      padding: 6px 0;
+      background: #fff;
+      border: 1px solid #e4e7ed;
+      border-radius: 4px;
+      box-shadow: 0 6px 18px rgba(31, 45, 61, 0.14);
+      display: none;
+      z-index: 120;
+    }
+
+    .toolbar-dropdown[open] .toolbar-dropdown-menu,
+    .toolbar-dropdown.open .toolbar-dropdown-menu {
+      display: block;
+    }
+
+    .toolbar-floating-menu,
+    .row-action-floating-menu {
+      position: fixed;
+      min-width: 128px;
+      padding: 6px 0;
+      background: #fff;
+      border: 1px solid #e4e7ed;
+      border-radius: 4px;
+      box-shadow: 0 6px 18px rgba(31, 45, 61, 0.14);
+      display: none;
+      z-index: 1400;
+    }
+
+    .toolbar-floating-menu.open,
+    .row-action-floating-menu.open {
+      display: block;
+    }
+
+    .toolbar-floating-menu button,
+    .row-action-floating-menu button {
+      width: 100%;
+      height: 32px;
+      padding: 0 12px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+      color: #5c6675;
+      cursor: pointer;
+    }
+
+    .toolbar-floating-menu button:hover,
+    .row-action-floating-menu button:hover {
+      background: #f5f7fa;
+      color: #409eff;
+    }
+
+    .toolbar-dropdown-menu button {
+      width: 100%;
+      height: 32px;
+      padding: 0 14px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+      color: #5c6675;
+      cursor: pointer;
+    }
+
+    .toolbar-dropdown-menu button:hover {
+      background: #f5f7fa;
+      color: #409eff;
+    }
+
     .mock-content {
       padding: 24px 28px 56px;
+      overflow: visible;
     }
 
     .mock-filter {
@@ -79,6 +199,11 @@
 
     .action-dropdown {
       position: relative;
+      z-index: 10;
+    }
+
+    .action-dropdown[open] {
+      z-index: 260;
     }
 
     .action-btn {
@@ -94,6 +219,15 @@
       font-size: 12px;
       color: #5f6b7a;
       cursor: pointer;
+      list-style: none;
+    }
+
+    .action-btn::-webkit-details-marker {
+      display: none;
+    }
+
+    .action-btn::marker {
+      display: none;
     }
 
     .action-menu {
@@ -107,9 +241,10 @@
       border-radius: 4px;
       box-shadow: 0 6px 18px rgba(31, 45, 61, 0.14);
       display: none;
-      z-index: 40;
+      z-index: 110;
     }
 
+    .action-dropdown[open] .action-menu,
     .action-menu.open {
       display: block;
     }
@@ -144,10 +279,12 @@
       border-collapse: collapse;
       background: #fff;
       border: 1px solid #e6ebf2;
+      overflow: visible;
     }
 
     .mock-table th,
     .mock-table td {
+      position: relative;
       padding: 14px 12px;
       border-bottom: 1px solid #edf1f6;
       text-align: left;
@@ -183,6 +320,7 @@
       padding-left: 8px;
       padding-right: 8px;
       vertical-align: top;
+      overflow: visible;
     }
 
     .select-header {
@@ -197,6 +335,7 @@
       align-items: center;
       gap: 8px;
       position: relative;
+      overflow: visible;
     }
 
     .select-stack .action-menu {
@@ -256,6 +395,7 @@
       align-items: flex-start;
       justify-content: center;
       padding-top: 48px;
+      z-index: 1000;
     }
 
     .overlay.open {
@@ -686,6 +826,62 @@
       background: #fff7f7;
     }
 
+    .task-select-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .task-select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-right: 1.5px solid #8ca0b3;
+      border-bottom: 1.5px solid #8ca0b3;
+      transform: translateY(-65%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .task-native-select {
+      height: 28px;
+      padding: 0 26px 0 10px;
+      border: 1px solid #cfd8e3;
+      border-radius: 4px;
+      background: #fff;
+      color: #606266;
+      font-size: 13px;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .task-native-select.medium {
+      width: 210px;
+    }
+
+    .task-native-select.small {
+      width: 120px;
+    }
+
+    .task-native-select.large {
+      width: 300px;
+    }
+
+    .task-native-select.danger {
+      border-color: #f3c6c6;
+      background: #fff7f7;
+    }
+
+    .task-native-select.placeholder {
+      color: #c0c4cc;
+    }
+
     .task-btn {
       height: 28px;
       padding: 0 12px;
@@ -994,6 +1190,505 @@
     .child-sku-modal {
       width: 420px;
     }
+
+    #fbaTransferModal {
+      padding-top: 18px;
+      background: rgba(20, 32, 51, 0.1);
+      align-items: flex-start;
+    }
+
+    .fba-modal {
+      width: 1282px;
+      min-height: 718px;
+      border: 1px solid #dfe7f1;
+      border-radius: 2px;
+      box-shadow: 0 8px 22px rgba(31, 45, 61, 0.1);
+      overflow: hidden;
+    }
+
+    .fba-modal .modal-header {
+      height: 34px;
+      padding: 0 14px 0 10px;
+      border-bottom-color: #edf2f8;
+    }
+
+    .fba-modal .modal-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #303133;
+    }
+
+    .fba-modal .close-icon {
+      font-size: 16px;
+      color: #a4adba;
+    }
+
+    .fba-modal .modal-body {
+      padding: 14px 12px 10px;
+    }
+
+    .fba-table-wrap {
+      border: 1px solid #edf1f6;
+      background: #fff;
+      min-height: 608px;
+      overflow: hidden;
+    }
+
+    .fba-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .fba-table thead th {
+      height: 34px;
+      padding: 0 8px;
+      background: #f9fbfd;
+      border-right: 1px solid #edf1f6;
+      border-bottom: 1px solid #edf1f6;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: #7f8898;
+      white-space: nowrap;
+    }
+
+    .fba-table thead th:last-child {
+      border-right: 0;
+    }
+
+    .fba-table tbody td {
+      padding: 10px 8px;
+      border-right: 1px solid #edf1f6;
+      border-bottom: 1px solid #edf1f6;
+      vertical-align: top;
+      font-size: 11px;
+      color: #4d5969;
+      background: #edf6ff;
+    }
+
+    .fba-table tbody td:last-child {
+      border-right: 0;
+    }
+
+    .fba-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .fba-col-product {
+      width: 28%;
+    }
+
+    .fba-col-shop {
+      width: 14%;
+    }
+
+    .fba-col-channel {
+      width: 10%;
+    }
+
+    .fba-col-status {
+      width: 10%;
+    }
+
+    .fba-col-price {
+      width: 18%;
+    }
+
+    .fba-col-current {
+      width: 14%;
+      position: relative;
+    }
+
+    .fba-col-action {
+      width: 6%;
+    }
+
+    .fba-product {
+      display: flex;
+      gap: 8px;
+    }
+
+    .fba-product-thumb {
+      width: 34px;
+      height: 76px;
+      border: 1px solid #dbe2eb;
+      border-radius: 2px;
+      background:
+        linear-gradient(90deg, #1d1f25 0 18%, #8b8e96 18% 26%, #f5f6f8 26% 50%, #121212 50% 62%, #dbdde2 62% 100%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+      flex: none;
+    }
+
+    .fba-product-main {
+      min-width: 0;
+    }
+
+    .fba-product-name {
+      line-height: 16px;
+      color: #303133;
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    .fba-product-meta {
+      line-height: 16px;
+      color: #7b8493;
+    }
+
+    .fba-shop {
+      line-height: 18px;
+    }
+
+    .fba-shop-flag {
+      font-size: 14px;
+      margin-right: 4px;
+    }
+
+    .fba-shop-name {
+      color: #303133;
+      margin-bottom: 2px;
+      word-break: break-all;
+    }
+
+    .fba-shop-team {
+      color: #7c8798;
+      font-size: 11px;
+    }
+
+    .fba-sale-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 20px;
+      padding: 0 8px;
+      border-radius: 2px;
+      background: #ffffff;
+      border: 1px solid #dbe8f8;
+      color: #409eff;
+      font-size: 11px;
+      line-height: 20px;
+    }
+
+    .fba-sale-status.off {
+      color: #909399;
+      border-color: #e3e8ef;
+    }
+
+    .fba-status-cell {
+      line-height: 18px;
+    }
+
+    .fba-status-cell .danger {
+      color: #f56c6c;
+    }
+
+    .fba-status-cell .muted {
+      color: #6b7280;
+    }
+
+    .fba-price-strategy {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #7c8798;
+      margin-bottom: 7px;
+      line-height: 16px;
+    }
+
+    .fba-price-radio {
+      width: 11px;
+      height: 11px;
+      border: 1px solid #d0d7e2;
+      border-radius: 50%;
+      background: #fff;
+      position: relative;
+      flex: none;
+    }
+
+    .fba-price-radio.active::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: #409eff;
+    }
+
+    .fba-price-accent {
+      color: #8f98a6;
+    }
+
+    .fba-price-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 5px;
+      color: #606266;
+      line-height: 16px;
+    }
+
+    .fba-price-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .fba-price-line strong {
+      font-weight: 400;
+      color: #606266;
+    }
+
+    .fba-price-single {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-top: 6px;
+      color: #606266;
+      line-height: 16px;
+    }
+
+    .fba-mini-input {
+      width: 48px;
+      height: 22px;
+      padding: 0 6px;
+      border: 1px solid #dcdfe6;
+      border-radius: 2px;
+      background: #fff;
+      font-size: 11px;
+      color: #606266;
+    }
+
+    .fba-cart-btn {
+      width: 92px;
+      height: 24px;
+      padding: 0;
+      border: 1px solid #dcdfe6;
+      border-radius: 2px;
+      background: #fff;
+      font-size: 11px;
+      color: #606266;
+      cursor: pointer;
+    }
+
+    .fba-current-cell {
+      padding-top: 14px;
+    }
+
+    .fba-remove-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: #409eff;
+      font-size: 11px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .fba-modal .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px 10px;
+    }
+
+    .fba-footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-link-primary {
+      min-width: 118px;
+      height: 20px;
+      padding: 0 10px;
+      border-radius: 2px;
+      border-color: #3b82f6;
+      font-size: 11px;
+      border-color: #409eff;
+      background: #409eff;
+      color: #fff;
+      margin-left: 0;
+    }
+
+    .fba-modal .btn {
+      min-width: 48px;
+      height: 22px;
+      padding: 0 12px;
+      border-radius: 2px;
+      font-size: 11px;
+      margin-left: 0;
+    }
+
+    .fba-modal .btn-primary {
+      background: #409eff;
+      border-color: #409eff;
+    }
+
+    .fba-bulk-cart-trigger {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #409eff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .fba-bulk-cart-trigger svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .fba-bulk-cart-trigger:hover {
+      color: #1f8cff;
+    }
+
+    .fba-header-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fba-help-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .fba-help-icon {
+      width: 14px;
+      height: 14px;
+      border: 1px solid #b8c2cf;
+      border-radius: 50%;
+      background: #fff;
+      color: #9099a8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      line-height: 1;
+      cursor: default;
+    }
+
+    .fba-help-tip {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 260px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      background: rgba(48, 49, 51, 0.94);
+      color: #fff;
+      font-size: 11px;
+      line-height: 16px;
+      font-weight: 400;
+      text-align: left;
+      box-shadow: 0 8px 20px rgba(31, 45, 61, 0.18);
+      display: none;
+      z-index: 90;
+      white-space: normal;
+    }
+
+    .fba-help-tip::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: rgba(48, 49, 51, 0.94);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .fba-help-wrap:hover .fba-help-tip {
+      display: block;
+    }
+
+    .fba-sort-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fba-sort-icon {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 0.7;
+      color: #6aa8ff;
+      font-size: 8px;
+      transform: translateY(-1px);
+    }
+
+    .fba-bulk-cart-popover {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 8px;
+      width: 176px;
+      padding: 10px;
+      border: 1px solid #dbe5f0;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(31, 45, 61, 0.12);
+      display: none;
+      z-index: 80;
+    }
+
+    .fba-bulk-cart-popover.open {
+      display: block;
+    }
+
+    .fba-bulk-cart-title {
+      font-size: 11px;
+      line-height: 16px;
+      color: #606266;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    .fba-bulk-cart-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .fba-bulk-cart-input {
+      flex: 1;
+      min-width: 0;
+      height: 24px;
+      padding: 0 8px;
+      border: 1px solid #dcdfe6;
+      border-radius: 2px;
+      font-size: 11px;
+      color: #606266;
+      outline: none;
+    }
+
+    .fba-bulk-cart-input:focus {
+      border-color: #409eff;
+    }
+
+    .fba-bulk-cart-unit {
+      font-size: 11px;
+      color: #909399;
+    }
+
+    .fba-bulk-cart-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .fba-bulk-cart-actions .btn {
+      min-width: 42px;
+      height: 22px;
+      padding: 0 10px;
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
@@ -1001,7 +1696,14 @@
     <div class="mock-header">
       <div class="mock-title">listingV2管理</div>
       <div class="mock-toolbar">
-        <div class="chip">批量调整</div>
+        <div class="toolbar-dropdown" id="batchActionDropdown">
+          <button class="toolbar-dropdown-btn" type="button" id="batchActionToggle" onclick="openBatchActionMenu(event, this)">
+            <span>批量操作</span>
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
         <div class="chip">导出</div>
       </div>
     </div>
@@ -1039,19 +1741,12 @@
               <div class="select-stack">
                 <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
                 <div class="action-dropdown row-action-dropdown">
-                  <button class="action-btn row-action-btn" type="button">
+                  <button class="action-btn row-action-btn" type="button" onclick="openRowActionMenu(event, this)">
                     <span>操作</span>
                     <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
                       <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
                   </button>
-                  <div class="action-menu row-action-menu">
-                    <button type="button" data-action="标题优化">标题优化</button>
-                    <button type="button" data-action="亮点优化">亮点优化</button>
-                    <button type="button" data-action="描述优化">描述优化</button>
-                    <button type="button" data-action="编辑图片">编辑图片</button>
-                    <button type="button" data-action="图片优化">图片优化</button>
-                  </div>
                 </div>
               </div>
             </td>
@@ -1065,7 +1760,7 @@
             <td>
               <div class="salesperson-cell">
                 <span class="salesperson-name">陈苗</span>
-                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员">
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员" onclick="openModal(this.closest('tr'))">
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
                     <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
@@ -1086,19 +1781,12 @@
               <div class="select-stack">
                 <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
                 <div class="action-dropdown row-action-dropdown">
-                  <button class="action-btn row-action-btn" type="button">
+                  <button class="action-btn row-action-btn" type="button" onclick="openRowActionMenu(event, this)">
                     <span>操作</span>
                     <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
                       <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
                   </button>
-                  <div class="action-menu row-action-menu">
-                    <button type="button" data-action="标题优化">标题优化</button>
-                    <button type="button" data-action="亮点优化">亮点优化</button>
-                    <button type="button" data-action="描述优化">描述优化</button>
-                    <button type="button" data-action="编辑图片">编辑图片</button>
-                    <button type="button" data-action="图片优化">图片优化</button>
-                  </div>
                 </div>
               </div>
             </td>
@@ -1112,7 +1800,7 @@
             <td>
               <div class="salesperson-cell">
                 <span class="salesperson-name">陈苗</span>
-                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员">
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员" onclick="openModal(this.closest('tr'))">
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
                     <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
@@ -1133,19 +1821,12 @@
               <div class="select-stack">
                 <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
                 <div class="action-dropdown row-action-dropdown">
-                  <button class="action-btn row-action-btn" type="button">
+                  <button class="action-btn row-action-btn" type="button" onclick="openRowActionMenu(event, this)">
                     <span>操作</span>
                     <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
                       <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
                   </button>
-                  <div class="action-menu row-action-menu">
-                    <button type="button" data-action="标题优化">标题优化</button>
-                    <button type="button" data-action="亮点优化">亮点优化</button>
-                    <button type="button" data-action="描述优化">描述优化</button>
-                    <button type="button" data-action="编辑图片">编辑图片</button>
-                    <button type="button" data-action="图片优化">图片优化</button>
-                  </div>
                 </div>
               </div>
             </td>
@@ -1159,7 +1840,7 @@
             <td>
               <div class="salesperson-cell">
                 <span class="salesperson-name">陈苗</span>
-                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员">
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员" onclick="openModal(this.closest('tr'))">
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
                     <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
@@ -1173,17 +1854,123 @@
             <td class="red">6</td>
             <td class="red">8</td>
             <td class="green">已转FBA</td>
-            <td>本地仓</td>
+            <td>德国</td>
+          </tr>
+          <tr>
+            <td class="select-cell">
+              <div class="select-stack">
+                <input type="checkbox" class="row-checkbox" aria-label="选择当前行" />
+                <div class="action-dropdown row-action-dropdown">
+                  <button class="action-btn row-action-btn" type="button" onclick="openRowActionMenu(event, this)">
+                    <span>操作</span>
+                    <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+                      <path d="M2 4.5L6 8l4-3.5" fill="none" stroke="#909399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="shop-person-cell">
+                <strong>Amazon IN</strong>
+                <span>廖崇英</span>
+              </div>
+            </td>
+            <td>2026-04-18</td>
+            <td>
+              <div class="salesperson-cell">
+                <span class="salesperson-name">廖崇英</span>
+                <button class="edit-salesperson-btn" type="button" aria-label="修改销售人员" onclick="openModal(this.closest('tr'))">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M11.8 2.2a1.5 1.5 0 0 1 2.1 2.1l-7.2 7.2-3.1.9.9-3.1 7.3-7.1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
+                    <path d="M10.7 3.3l2 2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td class="green">11</td>
+            <td class="blue">15</td>
+            <td class="blue">18</td>
+            <td class="red">21</td>
+            <td class="red">24</td>
+            <td class="blue">自发</td>
+            <td>印度</td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="overlay" id="fbaTransferModal">
+      <div class="modal fba-modal">
+        <div class="modal-header">
+          <div class="modal-title">批量转亚马逊配送</div>
+          <button class="close-icon" type="button" aria-label="关闭" id="fbaCloseIcon">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="fba-table-wrap">
+            <table class="fba-table">
+              <thead>
+                <tr>
+                  <th class="fba-col-product">产品信息</th>
+                  <th class="fba-col-shop">店铺</th>
+                  <th class="fba-col-channel">状态</th>
+                  <th class="fba-col-status">是否跟卖</th>
+                  <th class="fba-col-price">
+                    <span class="fba-header-inline">
+                      <span>你的售价</span>
+                      <span class="fba-help-wrap">
+                        <span class="fba-help-icon">?</span>
+                        <span class="fba-help-tip">印度站点使用印度计算器计算售价，其他站点默认按自发货售价的105%计算转FBAlisting的售价。</span>
+                      </span>
+                    </span>
+                  </th>
+                  <th class="fba-col-current">
+                    <span class="fba-header-inline">
+                      <span>加入购物车</span>
+                    <button class="fba-bulk-cart-trigger" type="button" id="fbaBulkCartTrigger" aria-label="批量加入购物车" title="批量加入购物车">
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <circle cx="6" cy="13" r="1.2" fill="currentColor"></circle>
+                        <circle cx="11.5" cy="13" r="1.2" fill="currentColor"></circle>
+                        <path d="M1.5 2.5h2l1.2 6.3h6.3l1.7-4.6H4.2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </button>
+                    </span>
+                    <div class="fba-bulk-cart-popover" id="fbaBulkCartPopover">
+                      <div class="fba-bulk-cart-title">批量加入购物车</div>
+                      <div class="fba-bulk-cart-row">
+                        <input class="fba-bulk-cart-input" id="fbaBulkCartQty" type="number" min="1" value="1" />
+                        <span class="fba-bulk-cart-unit">个</span>
+                      </div>
+                      <div class="fba-bulk-cart-actions">
+                        <button class="btn" type="button" id="fbaBulkCartCancel">取消</button>
+                        <button class="btn btn-primary" type="button" id="fbaBulkCartConfirm">确定</button>
+                      </div>
+                    </div>
+                  </th>
+                  <th class="fba-col-action">操作</th>
+                </tr>
+              </thead>
+              <tbody id="fbaTransferTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-link-primary" type="button" id="fbaFilterInvalidBtn">一键移除不满足Listing</button>
+          <div class="fba-footer-actions">
+            <button class="btn" type="button" id="fbaCancelBtn">关闭</button>
+            <button class="btn btn-primary" type="button" id="fbaConfirmBtn">确定</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="overlay" id="salespersonModal">
       <div class="modal">
         <div class="modal-header">
           <div class="modal-title">设置销售人员</div>
-          <button class="close-icon" type="button" aria-label="关闭">×</button>
+          <button class="close-icon" type="button" aria-label="关闭" id="salespersonCloseIcon">×</button>
         </div>
 
         <div class="modal-body">
@@ -1260,14 +2047,25 @@
             <div class="task-grid-row">
               <div class="task-grid-label"><span class="required">*</span>提报类型</div>
               <div class="task-grid-field">
-                <button class="task-control task-select-control select medium danger" type="button" data-options="reportType" data-value="普通图片优化">普通图片优化</button>
+                <div class="task-select-wrap">
+                  <select class="task-native-select medium danger" id="reportTypeSelect">
+                    <option value="普通图片优化" selected>普通图片优化</option>
+                    <option value="精优图片优化">精优图片优化</option>
+                    <option value="A+图片提报">A+图片提报</option>
+                  </select>
+                </div>
               </div>
             </div>
 
             <div class="task-grid-row">
               <div class="task-grid-label"><span class="required">*</span>是否精品特战</div>
               <div class="task-grid-field">
-                <button class="task-control task-select-control select small" type="button" data-options="boutiqueFlag" data-value="否">否</button>
+                <div class="task-select-wrap">
+                  <select class="task-native-select small" id="boutiqueFlagSelect">
+                    <option value="是">是</option>
+                    <option value="否" selected>否</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1313,7 +2111,13 @@
             <div class="task-grid-row">
               <div class="task-grid-label"><span class="required">*</span>来样渠道</div>
               <div class="task-grid-field">
-                <button class="task-control task-select-control select medium danger" type="button" data-options="sampleChannel" data-value="中国东莞1号仓库">中国东莞1号仓库</button>
+                <div class="task-select-wrap">
+                  <select class="task-native-select medium danger" id="sampleChannelSelect">
+                    <option value="中国东莞1号仓库" selected>中国东莞1号仓库</option>
+                    <option value="送样">送样</option>
+                    <option value="买样">买样</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1327,7 +2131,14 @@
             <div class="task-grid-row">
               <div class="task-grid-label"><span class="required">*</span>店铺</div>
               <div class="task-grid-field">
-                <button class="task-control task-select-control select large danger" type="button" data-options="shop" data-value="Amazon US 店铺">Amazon US 店铺</button>
+                <div class="task-select-wrap">
+                  <select class="task-native-select large danger" id="shopSelect">
+                    <option value="Amazon US 店铺" selected>Amazon US 店铺</option>
+                    <option value="Amazon UK 店铺">Amazon UK 店铺</option>
+                    <option value="Amazon DE 店铺">Amazon DE 店铺</option>
+                    <option value="Amazon IN 店铺">Amazon IN 店铺</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1341,7 +2152,14 @@
             <div class="task-grid-row">
               <div class="task-grid-label"><span class="required">*</span>销售人员</div>
               <div class="task-grid-field">
-                <button class="task-control task-select-control select medium danger" type="button" data-options="salesperson" data-value="陈苗">陈苗</button>
+                <div class="task-select-wrap">
+                  <select class="task-native-select medium danger" id="imageTaskSalespersonSelect">
+                    <option value="陈苗" selected>陈苗</option>
+                    <option value="廖崇英">廖崇英</option>
+                    <option value="徐旺">徐旺</option>
+                    <option value="FBA业务人员">FBA业务人员</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1355,7 +2173,17 @@
             <div class="task-grid-row">
               <div class="task-grid-label">产品标签（节日）</div>
               <div class="task-grid-field">
-                <button class="task-control task-select-control select large placeholder" type="button" data-options="festivalTag" data-placeholder="--产品标签--">--产品标签--</button>
+                <div class="task-select-wrap">
+                  <select class="task-native-select large placeholder" id="festivalTagSelect">
+                    <option value="" selected>--产品标签--</option>
+                    <option value="节日用品">节日用品</option>
+                    <option value="母亲节">母亲节</option>
+                    <option value="儿童节">儿童节</option>
+                    <option value="圣诞节">圣诞节</option>
+                    <option value="开学季">开学季</option>
+                    <option value="万圣节">万圣节</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1427,12 +2255,38 @@
     <div class="task-dropdown-panel" id="taskDropdownPanel">
       <div class="task-dropdown-options" id="taskDropdownOptions"></div>
     </div>
+
+    <div class="toolbar-floating-menu" id="toolbarFloatingMenu">
+      <button type="button" onclick="openFbaTransferModal()">转FBA</button>
+    </div>
+
+    <div class="row-action-floating-menu" id="rowActionFloatingMenu">
+      <button type="button" onclick="handleRowAction('标题优化')">标题优化</button>
+      <button type="button" onclick="handleRowAction('亮点优化')">亮点优化</button>
+      <button type="button" onclick="handleRowAction('描述优化')">描述优化</button>
+      <button type="button" onclick="handleRowAction('编辑图片')">编辑图片</button>
+      <button type="button" onclick="handleRowAction('图片优化')">图片优化</button>
+    </div>
   </div>
 
   <script>
     const overlay = document.getElementById("salespersonModal");
+    const fbaTransferModal = document.getElementById("fbaTransferModal");
     const imageTaskModal = document.getElementById("imageTaskModal");
     const warehouseModal = document.getElementById("warehouseModal");
+    const batchActionDropdown = document.getElementById("batchActionDropdown");
+    const batchActionToggle = document.getElementById("batchActionToggle");
+    const batchTransferFbaBtn = document.getElementById("batchTransferFbaBtn");
+    const fbaTransferTableBody = document.getElementById("fbaTransferTableBody");
+    const fbaCloseIcon = document.getElementById("fbaCloseIcon");
+    const fbaFilterInvalidBtn = document.getElementById("fbaFilterInvalidBtn");
+    const fbaCancelBtn = document.getElementById("fbaCancelBtn");
+    const fbaConfirmBtn = document.getElementById("fbaConfirmBtn");
+    const fbaBulkCartTrigger = document.getElementById("fbaBulkCartTrigger");
+    const fbaBulkCartPopover = document.getElementById("fbaBulkCartPopover");
+    const fbaBulkCartQty = document.getElementById("fbaBulkCartQty");
+    const fbaBulkCartCancel = document.getElementById("fbaBulkCartCancel");
+    const fbaBulkCartConfirm = document.getElementById("fbaBulkCartConfirm");
     const datetimeDisplay = document.getElementById("datetimeDisplay");
     const pickerPanel = document.getElementById("pickerPanel");
     const pickerWrap = document.getElementById("pickerWrap");
@@ -1445,19 +2299,25 @@
     const closeBtn = document.getElementById("closeBtn");
     const saveBtn = document.getElementById("saveBtn");
     const salespersonSelect = document.getElementById("salesperson");
-    const closeIcon = document.querySelector(".close-icon");
+    const closeIcon = document.getElementById("salespersonCloseIcon");
     const editButtons = document.querySelectorAll(".edit-salesperson-btn");
     const headerSelectAll = document.getElementById("headerSelectAll");
     const rowCheckboxes = document.querySelectorAll(".row-checkbox");
     const rowActionDropdowns = document.querySelectorAll(".row-action-dropdown");
     const rowActionButtons = document.querySelectorAll(".row-action-btn");
     const rowActionMenuButtons = document.querySelectorAll(".row-action-menu button");
+    const rowActionMenus = document.querySelectorAll(".row-action-menu");
+    const batchActionMenu = document.getElementById("batchActionMenu");
+    const toolbarFloatingMenu = document.getElementById("toolbarFloatingMenu");
+    const rowActionFloatingMenu = document.getElementById("rowActionFloatingMenu");
     const imageTaskCloseIcon = document.getElementById("imageTaskCloseIcon");
     const imageTaskCancelBtn = document.getElementById("imageTaskCancelBtn");
     const imageTaskSubmitBtn = document.getElementById("imageTaskSubmitBtn");
     const warehouseTrigger = document.getElementById("warehouseTrigger");
     const warehouseCloseIcon = document.getElementById("warehouseCloseIcon");
     const taskSelectControls = document.querySelectorAll(".task-select-control");
+    const reportTypeSelect = document.getElementById("reportTypeSelect");
+    const festivalTagSelect = document.getElementById("festivalTagSelect");
     const taskDropdownPanel = document.getElementById("taskDropdownPanel");
     const taskDropdownOptions = document.getElementById("taskDropdownOptions");
     const skuChoiceRadios = document.querySelectorAll('input[name="skuChoice"]');
@@ -1478,15 +2338,89 @@
     let tempDate = new Date(selectedDate);
     let currentEditingRow = null;
     let activeTaskSelect = null;
+    let currentFbaRows = [];
+    let currentRowActionTrigger = null;
 
     const taskDropdownData = {
       reportType: ["普通图片优化", "精优图片优化", "A+图片提报"],
       boutiqueFlag: ["是", "否"],
       sampleChannel: ["中国东莞1号仓库", "送样", "买样"],
-      shop: ["Amazon US 店铺", "Amazon UK 店铺", "Amazon DE 店铺"],
+      shop: ["Amazon US 店铺", "Amazon UK 店铺", "Amazon DE 店铺", "Amazon IN 店铺"],
       salesperson: ["陈苗", "廖崇英", "徐旺", "FBA业务人员"],
       festivalTag: ["节日用品", "母亲节", "儿童节", "圣诞节", "开学季", "万圣节"]
     };
+
+    const fbaListingSamples = [
+      {
+        productName: "免卡卡扣款户外收纳工具袋加厚挂架便携塑料水管整理器 黑色 / 蓝色金属款",
+        asin: "B0C7T933D7",
+        sku: "XK-887733D1",
+        msku: "U312/Z7C025TB",
+        siteCode: "US",
+        storeCode: "Amazon-7011437-US",
+        salesperson: "陈苗",
+        flag: "🇺🇸",
+        saleStatus: "在售",
+        followSale: "否",
+        declaredStatus: "已转FBA",
+        strategyPrice: "18.99",
+        tierPrice: "18.99",
+        rate: "105",
+        taxFreePrice: "10.91",
+        canTransfer: false
+      },
+      {
+        productName: "厨房置物可折叠金属挂钩收纳架 多场景承重升级款",
+        asin: "B0CT7H5P9K",
+        sku: "SN-2048UK9",
+        msku: "U568/US009A",
+        siteCode: "UK",
+        storeCode: "Amazon-7108431-UK",
+        salesperson: "陈苗",
+        flag: "🇬🇧",
+        saleStatus: "在售",
+        followSale: "否",
+        declaredStatus: "可转FBA",
+        strategyPrice: "24.50",
+        tierPrice: "24.50",
+        rate: "103",
+        taxFreePrice: "14.83",
+        canTransfer: true
+      },
+      {
+        productName: "桌面理线器多孔硅胶绕线座 适配办公家用场景",
+        asin: "B0D2X8K7Q1",
+        sku: "DL-9981DE5",
+        msku: "U901/DE778B",
+        siteCode: "DE",
+        storeCode: "Amazon-7082914-DE",
+        salesperson: "徐旺",
+        flag: "🇩🇪",
+        saleStatus: "非在售",
+        followSale: "是",
+        declaredStatus: "可转FBA",
+        strategyPrice: "16.80",
+        tierPrice: "16.80",
+        rate: "108",
+        taxFreePrice: "9.68",
+        canTransfer: true
+      },
+      {
+        productName: "便携式桌面阅读支架 金属折叠防滑升降款",
+        asin: "B0D8IN4KQ6",
+        sku: "IN-2046A88",
+        msku: "U188/IN662P",
+        siteCode: "IN",
+        storeCode: "Amazon-7064128-IN",
+        salesperson: "廖崇英",
+        flag: "🇮🇳",
+        saleStatus: "在售",
+        followSale: "否",
+        declaredStatus: "可转FBA",
+        tierPrice: "899.00",
+        canTransfer: true
+      }
+    ];
 
     function pad(value) {
       return String(value).padStart(2, "0");
@@ -1620,9 +2554,15 @@
     }
 
     function isAdvancedReportType() {
-      const reportTypeControl = document.querySelector('[data-options="reportType"]');
-      const reportType = reportTypeControl ? reportTypeControl.dataset.value || reportTypeControl.textContent.trim() : "";
+      const reportType = reportTypeSelect ? reportTypeSelect.value : "";
       return reportType === "精优图片优化" || reportType === "A+图片提报";
+    }
+
+    function syncFestivalTagPlaceholder() {
+      if (!festivalTagSelect) {
+        return;
+      }
+      festivalTagSelect.classList.toggle("placeholder", !festivalTagSelect.value);
     }
 
     function updateConditionalRequiredUI() {
@@ -1697,6 +2637,148 @@
       activeTaskSelect = null;
     }
 
+    function toggleBatchActionDropdown(forceOpen) {
+      const shouldOpen = typeof forceOpen === "boolean"
+        ? forceOpen
+        : !batchActionDropdown.hasAttribute("open");
+
+      if (shouldOpen) {
+        batchActionDropdown.setAttribute("open", "open");
+        batchActionDropdown.classList.add("open");
+      } else {
+        batchActionDropdown.removeAttribute("open");
+        batchActionDropdown.classList.remove("open");
+      }
+    }
+
+    function closeBatchActionMenu() {
+      toolbarFloatingMenu.classList.remove("open");
+    }
+
+    function openBatchActionMenu(event, trigger) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const rect = trigger.getBoundingClientRect();
+      const shouldOpen = !toolbarFloatingMenu.classList.contains("open");
+
+      closeBatchActionMenu();
+      closeActionMenu();
+
+      if (!shouldOpen) {
+        return;
+      }
+
+      toolbarFloatingMenu.style.left = rect.left + "px";
+      toolbarFloatingMenu.style.top = (rect.bottom + 6) + "px";
+      toolbarFloatingMenu.classList.add("open");
+    }
+
+    function getSelectedBatchRows() {
+      return Array.from(rowCheckboxes)
+        .map((checkbox, index) => ({ checkbox, row: checkbox.closest("tr"), index }))
+        .filter((item) => item.checkbox.checked);
+    }
+
+    function renderFbaTransferRows() {
+      if (currentFbaRows.length === 0) {
+        fbaTransferTableBody.innerHTML = "";
+        return;
+      }
+
+      fbaTransferTableBody.innerHTML = currentFbaRows.map((item, index) => {
+        const statusText = item.canTransfer ? "可转FBA" : item.declaredStatus;
+        const priceCellHtml = item.siteCode === "IN"
+          ? [
+            '    <div class="fba-price-single"><span>售价</span><input class="fba-mini-input" type="text" value="' + item.tierPrice + '" /><span>$</span></div>'
+          ].join("")
+          : [
+            '    <div class="fba-price-strategy"><span class="fba-price-radio active"></span><span>按自发货价格 <span class="fba-price-accent">$' + item.strategyPrice + "</span></span></div>",
+            '    <div class="fba-price-line"><span>售价</span><input class="fba-mini-input" type="text" value="' + item.tierPrice + '" /><span>$</span></div>',
+            '    <div class="fba-price-line"><span>按售价</span><input class="fba-mini-input" type="text" value="' + item.rate + '" /><span>%</span></div>',
+            '    <div class="fba-price-line"><span>不含税价</span><span class="fba-price-accent">$' + item.taxFreePrice + "</span></div>"
+          ].join("");
+        return [
+          '<tr data-index="' + index + '">',
+          '  <td class="fba-col-product">',
+          '    <div class="fba-product">',
+          '      <div class="fba-product-thumb" aria-hidden="true"></div>',
+          '      <div class="fba-product-main">',
+          '        <div class="fba-product-name">' + item.productName + "</div>",
+          '        <div class="fba-product-meta">ASIN: ' + item.asin + "</div>",
+          '        <div class="fba-product-meta">SKU: ' + item.sku + "</div>",
+          '        <div class="fba-product-meta">MSKU: ' + item.msku + "</div>",
+          "      </div>",
+          "    </div>",
+          "  </td>",
+          '  <td class="fba-col-shop">',
+          '    <div class="fba-shop">',
+          '      <div class="fba-shop-name"><span class="fba-shop-flag">' + item.flag + "</span>" + item.storeCode + "</div>",
+          '      <div class="fba-shop-team">销售：' + item.salesperson + "</div>",
+          "    </div>",
+          "  </td>",
+          '  <td class="fba-col-channel">',
+          '    <span class="fba-sale-status' + (item.saleStatus === "非在售" ? " off" : "") + '">' + item.saleStatus + "</span>",
+          "  </td>",
+          '  <td class="fba-col-status">',
+          '    <div class="fba-status-cell">',
+          '      <div class="muted">' + item.followSale + "</div>",
+          '      <div class="' + (item.canTransfer ? "green" : "danger") + '">' + statusText + "</div>",
+          "    </div>",
+          "  </td>",
+          '  <td class="fba-col-price">' + priceCellHtml + "</td>",
+          '  <td class="fba-col-current fba-current-cell"><button class="fba-cart-btn" type="button">加入购物车</button></td>',
+          '  <td class="fba-col-action"><button class="fba-remove-link" type="button" data-action="remove">移除</button></td>',
+          "</tr>"
+        ].join("");
+      }).join("");
+    }
+
+    function openFbaTransferModal() {
+      const selectedRows = getSelectedBatchRows();
+
+      if (selectedRows.length === 0) {
+        alert("请先勾选需要批量转FBA的Listing");
+        return;
+      }
+
+      currentFbaRows = selectedRows.map((item) => {
+        const sample = fbaListingSamples[item.index] || fbaListingSamples[0];
+        return Object.assign({}, sample);
+      });
+
+      renderFbaTransferRows();
+      toggleBatchActionDropdown(false);
+      closeBatchActionMenu();
+      fbaTransferModal.classList.add("open");
+    }
+
+    function closeFbaTransferModal() {
+      closeFbaBulkCartPopover();
+      fbaTransferModal.classList.remove("open");
+    }
+
+    function openFbaBulkCartPopover() {
+      fbaBulkCartPopover.classList.add("open");
+      fbaBulkCartQty.focus();
+      fbaBulkCartQty.select();
+    }
+
+    function closeFbaBulkCartPopover() {
+      fbaBulkCartPopover.classList.remove("open");
+    }
+
+    function toggleFbaBulkCartPopover() {
+      const isOpen = fbaBulkCartPopover.classList.contains("open");
+      if (isOpen) {
+        closeFbaBulkCartPopover();
+        return;
+      }
+      openFbaBulkCartPopover();
+    }
+
     function openTaskDropdown(control) {
       const isSameControl = activeTaskSelect === control && taskDropdownPanel.classList.contains("open");
       closeTaskDropdown();
@@ -1749,21 +2831,66 @@
     }
 
     function toggleActionMenu(targetDropdown) {
-      const targetMenu = targetDropdown.querySelector(".action-menu");
-      const shouldOpen = !targetMenu.classList.contains("open");
+      if (!targetDropdown) {
+        return;
+      }
+      const shouldOpen = !targetDropdown.hasAttribute("open");
       closeActionMenu();
       if (shouldOpen) {
-        targetMenu.classList.add("open");
+        targetDropdown.setAttribute("open", "open");
+        const targetMenu = targetDropdown.querySelector(".action-menu");
+        if (targetMenu) {
+          targetMenu.classList.add("open");
+        }
       }
     }
 
     function closeActionMenu() {
+      currentRowActionTrigger = null;
+      rowActionFloatingMenu.classList.remove("open");
       rowActionDropdowns.forEach((dropdown) => {
+        dropdown.removeAttribute("open");
         const menu = dropdown.querySelector(".action-menu");
         if (menu) {
           menu.classList.remove("open");
         }
       });
+    }
+
+    function openRowActionMenu(event, trigger) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const shouldOpen = currentRowActionTrigger !== trigger || !rowActionFloatingMenu.classList.contains("open");
+      closeActionMenu();
+      closeBatchActionMenu();
+
+      if (!shouldOpen) {
+        return;
+      }
+
+      const rect = trigger.getBoundingClientRect();
+      currentRowActionTrigger = trigger;
+      rowActionFloatingMenu.style.left = rect.left + "px";
+      rowActionFloatingMenu.style.top = (rect.bottom + 6) + "px";
+      rowActionFloatingMenu.classList.add("open");
+    }
+
+    function handleRowAction(actionName) {
+      if (!actionName) {
+        return;
+      }
+
+      closeActionMenu();
+
+      if (actionName === "图片优化") {
+        openImageTaskModal();
+        return;
+      }
+
+      alert("原型演示：" + actionName);
     }
 
     datetimeDisplay.addEventListener("click", (event) => {
@@ -1807,11 +2934,18 @@
       if (!pickerWrap.contains(event.target)) {
         closePicker();
       }
-      if (!event.target.closest(".row-action-dropdown")) {
+      if (!event.target.closest(".row-action-dropdown") && !event.target.closest(".row-action-floating-menu")) {
         closeActionMenu();
       }
       if (!event.target.closest(".task-dropdown-panel") && !event.target.closest(".task-select-control")) {
         closeTaskDropdown();
+      }
+      if (!event.target.closest(".toolbar-dropdown") && !event.target.closest(".toolbar-floating-menu")) {
+        toggleBatchActionDropdown(false);
+        closeBatchActionMenu();
+      }
+      if (!event.target.closest(".fba-col-current")) {
+        closeFbaBulkCartPopover();
       }
     });
 
@@ -1823,14 +2957,54 @@
       checkbox.addEventListener("change", syncSelectAllState);
     });
 
+    if (batchActionMenu) {
+      batchActionMenu.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    if (batchTransferFbaBtn) {
+      batchTransferFbaBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openFbaTransferModal();
+      });
+    }
+
+    fbaBulkCartTrigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleFbaBulkCartPopover();
+    });
+
+    fbaBulkCartCancel.addEventListener("click", () => {
+      closeFbaBulkCartPopover();
+    });
+
+    fbaBulkCartConfirm.addEventListener("click", () => {
+      closeFbaBulkCartPopover();
+    });
+
     skuChoiceRadios.forEach((radio) => {
       radio.addEventListener("change", syncProductNameBySku);
     });
 
-    rowActionButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
+    rowActionMenus.forEach((menu) => {
+      menu.addEventListener("click", (event) => {
         event.stopPropagation();
-        toggleActionMenu(button.closest(".row-action-dropdown"));
+      });
+    });
+
+    rowActionMenuButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        handleRowAction(button.dataset.action);
+      });
+    });
+
+    editButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        openModal(button.closest("tr"));
       });
     });
 
@@ -1840,6 +3014,14 @@
         openTaskDropdown(control);
       });
     });
+
+    if (reportTypeSelect) {
+      reportTypeSelect.addEventListener("change", updateConditionalRequiredUI);
+    }
+
+    if (festivalTagSelect) {
+      festivalTagSelect.addEventListener("change", syncFestivalTagPlaceholder);
+    }
 
     taskDropdownOptions.addEventListener("click", (event) => {
       const option = event.target.closest(".task-dropdown-option");
@@ -1893,26 +3075,6 @@
       }
     });
 
-    rowActionMenuButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const actionName = button.dataset.action;
-        closeActionMenu();
-
-        if (actionName === "图片优化") {
-          openImageTaskModal();
-          return;
-        }
-
-        alert("原型演示：" + actionName);
-      });
-    });
-
-    editButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        openModal(button.closest("tr"));
-      });
-    });
-
     closeBtn.addEventListener("click", closeModal);
     closeIcon.addEventListener("click", closeModal);
 
@@ -1951,6 +3113,45 @@
       }
     });
 
+    fbaTransferTableBody.addEventListener("click", (event) => {
+      const removeButton = event.target.closest('[data-action="remove"]');
+      if (!removeButton) {
+        return;
+      }
+
+      const row = removeButton.closest("tr");
+      const rowIndex = Number(row.dataset.index);
+      currentFbaRows.splice(rowIndex, 1);
+      renderFbaTransferRows();
+    });
+
+    fbaFilterInvalidBtn.addEventListener("click", () => {
+      currentFbaRows = currentFbaRows.filter((item) => item.canTransfer);
+      renderFbaTransferRows();
+    });
+
+    fbaCloseIcon.addEventListener("click", closeFbaTransferModal);
+    fbaCancelBtn.addEventListener("click", closeFbaTransferModal);
+
+    fbaConfirmBtn.addEventListener("click", () => {
+      closeFbaTransferModal();
+    });
+
+    fbaTransferModal.addEventListener("click", (event) => {
+      if (event.target === fbaTransferModal) {
+        closeFbaTransferModal();
+      }
+    });
+
+    window.openModal = openModal;
+    window.openImageTaskModal = openImageTaskModal;
+    window.openFbaTransferModal = openFbaTransferModal;
+    window.handleRowAction = handleRowAction;
+    window.toggleActionMenu = toggleActionMenu;
+    window.toggleBatchActionDropdown = toggleBatchActionDropdown;
+    window.openBatchActionMenu = openBatchActionMenu;
+    window.openRowActionMenu = openRowActionMenu;
+
     saveBtn.addEventListener("click", () => {
       const salesperson = salespersonSelect.value;
       const effectiveTime = datetimeDisplay.classList.contains("placeholder")
@@ -1972,6 +3173,7 @@
     syncSelectAllState();
     syncProductNameBySku();
     updateConditionalRequiredUI();
+    syncFestivalTagPlaceholder();
   </script>
 </body>
 </html>
